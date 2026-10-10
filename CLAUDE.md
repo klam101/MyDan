@@ -30,17 +30,34 @@ https://claude.ai/code/artifact/d01dc4d9-07c8-490b-a427-590b9b187b53
 React + TypeScript + Vite (PWA, plain CSS) · Node + TypeScript + Fastify · Postgres · hosted
 auth (e.g. Supabase Auth or Clerk) · a managed host for API and database · Vitest.
 
-Next step: build the frontend first with mock data (login, pick restaurant, staff and roles,
-plus the existing screens), then list every API call those screens need as the backend plan.
+Status: the cloud frontend is built in `apps/frontend` on a mock API. Next step: the backend,
+following `docs/api-plan.md` (every call the screens make, with roles and server-side rules).
 
-## Current code
+## Cloud frontend (`apps/frontend`)
 
-The code below is the earlier local version: the server runs on a computer in the restaurant,
-stores data in SQLite and prints directly over the network. It is being moved to the cloud
-design above.
+Runs entirely on mock data saved in the browser; demo logins are on the sign-in screen.
+- `src/domain/` – data model (`types.ts`, the API contract), pricing, modifier rules
+  (`modifiers.ts`), order line building (`lines.ts`), ticket layout (`ticket.ts`), role
+  permissions. Pure code meant to be shared with the backend.
+- `src/data/api.ts` – the `Api` interface; `mockApi.ts` implements it in the browser and
+  enforces sign-in, restaurant scoping and roles; `seed.ts` demo data (menu from
+  `apps/server/src/menu-data.ts`); `session.tsx` signed-in user and current restaurant.
+- `src/screens/` – New order, Orders, order detail, Kitchen, Menu, Modifier lists, Staff,
+  Settings, sign-in, restaurant picker, PIN switch. `src/components/` shared pieces.
+- Modifications are Toast-style: shared modifier lists attached to categories or dishes; the
+  cashier picks NO / ADD / EXTRA / LIGHT / ON SIDE / SUB, then the ingredient. ADD, EXTRA and SUB
+  charge the modifier's price.
+- Roles: cashier takes orders and marks dishes sold out; manager also edits the menu and manages
+  cashiers; owner also manages everyone and settings. A shared tablet switches staff by PIN.
+
+## Local version (`apps/server`, `apps/web`)
+
+The earlier local version: the server runs on a computer in the restaurant, stores data in
+SQLite and prints directly over the network. It is being replaced by the cloud design above.
 
 ## Layout
 
+- `apps/frontend` – the cloud frontend (see above).
 - `apps/server` – Node.js + TypeScript backend (Fastify). Runs on the hub (local version).
   - `src/app.ts` routes, `src/orders.ts` order logic, `src/menu.ts` menu,
     `src/ticket.ts` ticket layout + ESC/POS bytes, `src/printer.ts` network/console printers,
@@ -54,8 +71,9 @@ design above.
 
 - `npm install` – install everything (npm workspaces)
 - `npm run dev` – server on :3000 and web app on :5173 (`--host`, so the iPad can open it)
-- `npm test` – server tests (Vitest)
-- `npm run typecheck` – both apps
+- `npm run dev:frontend` – cloud frontend on :5174 (`--host`); needs no server
+- `npm test` – server and frontend tests (Vitest)
+- `npm run typecheck` – all apps
 - `npm run build && npm start` – production: the server also serves the built web app on :3000
 
 ## Conventions
