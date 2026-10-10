@@ -3,13 +3,14 @@
   "private": true,
   "version": "0.1.0",
   "description": "Tablet ordering and kitchen ticket system for a takeout restaurant",
-  "workspaces": ["apps/server", "apps/web"],
+  "workspaces": ["apps/server", "apps/web", "apps/frontend"],
   "engines": { "node": ">=22.13" },
   "scripts": {
     "dev": "npm run dev --workspace apps/server & npm run dev --workspace apps/web",
+    "dev:frontend": "npm run dev --workspace apps/frontend",
     "build": "npm run build --workspace apps/web && npm run build --workspace apps/server",
     "start": "npm run start --workspace apps/server",
-    "test": "npm test --workspace apps/server",
+    "test": "npm test --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces"
   }
 }
