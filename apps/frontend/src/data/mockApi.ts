@@ -264,9 +264,10 @@ export function createMockApi({ latency = 150, printDelay = 2000, persist = true
         const { restaurant } = scope(rid, "settings");
         if (changes.name !== undefined && !changes.name.trim()) throw new ApiError("The restaurant needs a name", 400);
         if (changes.taxRate !== undefined && !(changes.taxRate >= 0 && changes.taxRate < 0.5)) throw new ApiError("Tax rate looks wrong", 400);
-        const { printer, ...rest } = changes;
-        Object.assign(restaurant, rest);
-        if (printer) Object.assign(restaurant.printer, printer);
+        const { name, phone, address, taxRate, timezone, ticketLanguage, printer } = changes;
+        Object.assign(restaurant, Object.fromEntries(Object.entries({ name, phone, address, taxRate, timezone, ticketLanguage }).filter(([, v]) => v !== undefined)));
+        // The printer reports its own status; settings only say which printer it is.
+        if (printer) Object.assign(restaurant.printer, { kind: printer.kind, name: printer.name, deviceId: printer.deviceId });
         return restaurant;
       }),
 
