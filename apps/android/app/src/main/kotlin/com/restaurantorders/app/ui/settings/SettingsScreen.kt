@@ -1,5 +1,7 @@
 package com.restaurantorders.app.ui.settings
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.restaurantorders.app.AppContainer
@@ -39,7 +42,10 @@ import com.restaurantorders.app.ui.rememberAction
 import com.restaurantorders.domain.TicketKind
 import com.restaurantorders.domain.TicketLanguage
 import com.restaurantorders.domain.buildTestTicket
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.time.Instant
+import java.time.LocalDate
 
 private val LANGUAGES = listOf(TicketLanguage.EN to "English", TicketLanguage.ZH to "Chinese", TicketLanguage.BOTH to "Both")
 
@@ -57,7 +63,18 @@ fun SettingsScreen(app: AppContainer, saved: SettingsEntity) {
     var chinese by remember(saved) { mutableStateOf(saved.printerChinese) }
     var message by remember { mutableStateOf<BannerMessage?>(null) }
     var printMessage by remember { mutableStateOf<BannerMessage?>(null) }
+    var exportMessage by remember { mutableStateOf<BannerMessage?>(null) }
     val action = rememberAction()
+    val context = LocalContext.current
+    // Android asks where to save the file (Downloads, Google Drive, a USB stick...).
+    val exportTo = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        action.run {
+            val json = app.export()
+            withContext(Dispatchers.IO) { context.contentResolver.openOutputStream(uri)!!.use { it.write(json.toByteArray()) } }
+            exportMessage = BannerMessage(BannerKind.OK, "Saved a copy of the menu, staff and every order.")
+        }
+    }
 
     fun form(): SettingsEntity = saved.copy(
         restaurantName = name,
@@ -143,6 +160,12 @@ fun SettingsScreen(app: AppContainer, saved: SettingsEntity) {
                     },
                 ) { Text("Save and print test ticket") }
                 printMessage?.let { Banner(it) }
+            }
+
+            Section("Back up") {
+                Text("Save everything on this tablet (settings, menu, staff names and every order) as one file. PINs are never included.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                OutlinedButton(onClick = { exportTo.launch("orders-backup-${LocalDate.now()}.json") }, enabled = !action.busy) { Text("Export data") }
+                exportMessage?.let { Banner(it) }
             }
 
             Button(
