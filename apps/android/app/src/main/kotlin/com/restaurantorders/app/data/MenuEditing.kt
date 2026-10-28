@@ -4,6 +4,8 @@
 // carts and past orders stay linked.
 package com.restaurantorders.app.data
 
+import com.restaurantorders.domain.Choice
+import com.restaurantorders.domain.ChoiceGroup
 import com.restaurantorders.domain.Menu
 import com.restaurantorders.domain.MenuCategory
 import com.restaurantorders.domain.MenuItem
@@ -28,6 +30,7 @@ data class DishInput(
     val choices: List<String>,
     val spicy: Boolean,
     val modifierListIds: List<String>,
+    val choiceGroupIds: List<String> = emptyList(),
 )
 
 data class ModifierInput(val id: String?, val name: String, val altName: String, val priceCents: Int)
@@ -54,11 +57,71 @@ class MenuEditor(private val menu: MenuRepository, private val session: Session)
         return category
     }
 
-    suspend fun saveCategory(id: String, name: String, note: String, modifierListIds: List<String>) {
+    /** `altName` and `choiceGroupIds` are kept as they are when null. */
+    suspend fun saveCategory(
+        id: String,
+        name: String,
+        note: String,
+        modifierListIds: List<String>,
+        altName: String? = null,
+        choiceGroupIds: List<String>? = null,
+    ) {
         if (name.isBlank()) throw ActionException("The category needs a name")
         menu.edit(session) { m ->
-            m.mapCategories { c -> if (c.id == id) c.copy(name = name.trim(), note = note.trim().ifEmpty { null }, modifierListIds = m.knownLists(modifierListIds)) else c }
+            m.mapCategories { c ->
+                if (c.id != id) return@mapCategories c
+                c.copy(
+                    name = name.trim(),
+                    note = note.trim().ifEmpty { null },
+                    modifierListIds = m.knownLists(modifierListIds),
+                    altName = if (altName == null) c.altName else altName.trim().ifEmpty { null },
+                    choiceGroupIds = choiceGroupIds?.let { m.knownGroups(it) } ?: c.choiceGroupIds,
+                )
+            }
         }
+    }
+
+    /**
+     * Adds a choice group (`id` null) or changes one (backlog C1). Choices that keep their id
+     * stay linked to open carts.
+     */
+    suspend fun saveChoiceGroup(id: String?, name: String, altName: String, min: Int, max: Int, choices: List<ModifierInput>): ChoiceGroup {
+        val trimmed = name.trim()
+        if (trimmed.isEmpty()) throw ActionException("The group needs a name")
+        val rows = choices.filter { it.name.isNotBlank() }
+        if (rows.isEmpty()) throw ActionException("Add at least one choice")
+        if (rows.any { it.priceCents < 0 }) throw ActionException("Prices must be zero or more")
+        if (min < 0 || max < 1 || min > max) throw ActionException("Picks go from a minimum of 0 or more up to a maximum of at least 1")
+        if (min > rows.size) throw ActionException("The group needs at least $min choices")
+        var saved: ChoiceGroup? = null
+        menu.edit(session) { m ->
+            if (m.choiceGroups.any { it.id != id && it.name.equals(trimmed, ignoreCase = true) }) throw ActionException("There is already a group called $trimmed")
+            val current = id?.let { gid -> m.choiceGroups.find { it.id == gid } ?: throw ActionException("Group not found") }
+            val group = ChoiceGroup(
+                id = current?.id ?: newId(),
+                name = trimmed,
+                altName = altName.trim().ifEmpty { null },
+                min = min,
+                max = max,
+                choices = rows.map { r ->
+                    val keepId = r.id?.takeIf { rid -> current?.choices?.any { it.id == rid } == true }
+                    Choice(keepId ?: newId(), r.name.trim(), r.altName.trim().ifEmpty { null }, r.priceCents)
+                },
+            )
+            saved = group
+            m.copy(choiceGroups = if (current == null) m.choiceGroups + group else m.choiceGroups.map { if (it.id == group.id) group else it })
+        }
+        return saved!!
+    }
+
+    /** Also detaches the group from every category and dish. */
+    suspend fun removeChoiceGroup(id: String) = menu.edit(session) { m ->
+        m.copy(
+            choiceGroups = m.choiceGroups.filter { it.id != id },
+            categories = m.categories.map { c ->
+                c.copy(choiceGroupIds = c.choiceGroupIds - id, items = c.items.map { it.copy(choiceGroupIds = it.choiceGroupIds - id) })
+            },
+        )
     }
 
     /** Only an empty category can be removed. */
@@ -94,6 +157,7 @@ class MenuEditor(private val menu: MenuRepository, private val session: Session)
                 available = current?.available ?: true,
                 optionGroups = groups,
                 modifierListIds = m.knownLists(input.modifierListIds),
+                choiceGroupIds = m.knownGroups(input.choiceGroupIds),
             )
             saved = dish
             m.mapCategories { c ->
@@ -112,10 +176,10 @@ class MenuEditor(private val menu: MenuRepository, private val session: Session)
     /** Past orders keep the dish; it just leaves the menu. */
     suspend fun removeDish(id: String) = menu.edit(session) { m -> m.mapCategories { c -> c.copy(items = c.items.filter { it.id != id }) } }
 
-    suspend fun saveModifierList(id: String?, name: String, actions: List<PreModifier>, modifiers: List<ModifierInput>): ModifierList {
+    suspend fun saveModifierList(id: String?, name: String, actions: List<PreModifier>, modifiers: List<ModifierInput>, altName: String = ""): ModifierList {
         val trimmed = name.trim()
         if (trimmed.isEmpty()) throw ActionException("The list needs a name")
-        if (actions.isEmpty()) throw ActionException("Pick at least one of NO, ADD, EXTRA, LIGHT, ON SIDE, SUB")
+        if (actions.isEmpty()) throw ActionException("Pick at least one of Add, More, Less, No, Only, Change, Side")
         val rows = modifiers.filter { it.name.isNotBlank() }
         if (rows.isEmpty()) throw ActionException("Add at least one ingredient")
         if (rows.any { it.priceCents < 0 }) throw ActionException("Prices must be zero or more")
@@ -126,7 +190,8 @@ class MenuEditor(private val menu: MenuRepository, private val session: Session)
             val list = ModifierList(
                 id = current?.id ?: newId(),
                 name = trimmed,
-                actions = PreModifier.entries.filter { it in actions },
+                actions = PreModifier.BAR.filter { it in actions },
+                altName = altName.trim().ifEmpty { null },
                 modifiers = rows.map { r ->
                     val keepId = r.id?.takeIf { rid -> current?.modifiers?.any { it.id == rid } == true }
                     Modifier(keepId ?: newId(), r.name.trim(), r.altName.trim().ifEmpty { null }, r.priceCents)
@@ -149,4 +214,6 @@ class MenuEditor(private val menu: MenuRepository, private val session: Session)
     }
 
     private fun Menu.knownLists(ids: List<String>) = ids.distinct().filter { id -> modifierLists.any { it.id == id } }
+
+    private fun Menu.knownGroups(ids: List<String>) = ids.distinct().filter { id -> choiceGroups.any { it.id == id } }
 }

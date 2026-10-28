@@ -109,4 +109,30 @@ class MenuEditingTest {
         assertTrue(json.contains("Pork Egg Roll"))
         assertFalse(json.contains("pinHash"))
     }
+    @Test
+    fun `choice groups are made once and attached to categories (C1)`() = runBlocking {
+        val group = app.menuEditor.saveChoiceGroup(
+            null, "Drink", "飲料", 0, 1,
+            listOf(ModifierInput(null, "Coke", "可樂", 150), ModifierInput(null, "Tea", "茶", 100)),
+        )
+        val lunch = category("Lunch Special")
+        app.menuEditor.saveCategory(lunch.id, lunch.name, lunch.note.orEmpty(), lunch.modifierListIds, "午餐", lunch.choiceGroupIds + group.id)
+        val updated = category("Lunch Special")
+        assertEquals("午餐", updated.altName)
+        assertEquals(listOf("Comb & Lunch Choice", "Something Extra", "Drink"), updated.choiceGroupIds.map { id -> app.menu.get().choiceGroups.first { it.id == id }.name })
+
+        // A dish in the category can now be ordered with a drink; the price adds on.
+        val dish = updated.items.first()
+        val coke = group.choices.first().id
+        val (view, _) = app.orders.create(OrderInput(OrderType.WALK_IN, lines = listOf(NewOrderLine(dish.id, 1, dish.optionGroups.map { it.options.first().id }, choiceIds = listOf(coke)))))
+        assertEquals("Coke", view.order.lines.single().choices.single().name)
+
+        // Editing keeps choice ids; deleting detaches the group everywhere.
+        val edited = app.menuEditor.saveChoiceGroup(group.id, "Drink", "飲料", 0, 2, listOf(ModifierInput(coke, "Coke", "可樂", 175)))
+        assertEquals(coke, edited.choices.single().id)
+        assertContains(assertFailsWith<ActionException> { app.menuEditor.saveChoiceGroup(null, "drink", "", 0, 1, listOf(ModifierInput(null, "x", "", 0))) }.message!!, "already a group")
+        assertContains(assertFailsWith<ActionException> { app.menuEditor.saveChoiceGroup(null, "Sauce cup", "", 2, 1, listOf(ModifierInput(null, "x", "", 0))) }.message!!, "Picks go from")
+        app.menuEditor.removeChoiceGroup(group.id)
+        assertFalse(category("Lunch Special").choiceGroupIds.contains(group.id))
+    }
 }

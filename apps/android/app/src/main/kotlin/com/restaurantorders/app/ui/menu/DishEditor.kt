@@ -66,10 +66,12 @@ fun DishEditor(app: AppContainer, menu: Menu, dish: MenuItem?, categoryId: Strin
     var choices by remember { mutableStateOf(dish?.optionGroups?.find { it.name == MenuOptionGroup.CHOICE }?.options?.joinToString(", ") { it.name }.orEmpty()) }
     var spicy by remember { mutableStateOf(dish?.spicy ?: false) }
     var listIds by remember { mutableStateOf(dish?.modifierListIds ?: emptyList()) }
+    var groupIds by remember { mutableStateOf(dish?.choiceGroupIds ?: emptyList()) }
     var categoryMenu by remember { mutableStateOf(false) }
     var confirmRemove by remember { mutableStateOf(false) }
     val action = rememberAction()
     val categoryLists = menu.categories.find { it.id == category }?.modifierListIds.orEmpty()
+    val categoryGroups = menu.categories.find { it.id == category }?.choiceGroupIds.orEmpty()
 
     Dialog(onDismissRequest = onDone, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(shape = RoundedCornerShape(16.dp), modifier = Modifier.padding(16.dp).widthIn(max = 820.dp).heightIn(max = 800.dp)) {
@@ -134,6 +136,21 @@ fun DishEditor(app: AppContainer, menu: Menu, dish: MenuItem?, categoryId: Strin
                             )
                         }
                     }
+                    if (menu.choiceGroups.isNotEmpty()) {
+                        Text("CHOICE GROUPS", style = MaterialTheme.typography.labelLarge, color = Muted)
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            menu.choiceGroups.forEach { g ->
+                                val fromCategory = g.id in categoryGroups
+                                val on = fromCategory || g.id in groupIds
+                                FilterChip(
+                                    selected = on,
+                                    enabled = !fromCategory,
+                                    onClick = { groupIds = if (on) groupIds - g.id else groupIds + g.id },
+                                    label = { Text(g.name + if (fromCategory) " (whole category)" else "") },
+                                )
+                            }
+                        }
+                    }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(spicy, { spicy = it })
                         Text("Hot & spicy (★ on the menu)")
@@ -164,6 +181,7 @@ fun DishEditor(app: AppContainer, menu: Menu, dish: MenuItem?, categoryId: Strin
                                         choices = choices.split(","),
                                         spicy = spicy,
                                         modifierListIds = listIds,
+                                        choiceGroupIds = groupIds,
                                     ),
                                 )
                                 onDone()

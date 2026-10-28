@@ -74,7 +74,7 @@ fun MenuScreen(app: AppContainer, staff: Staff) {
         if (editor) {
             SingleChoiceSegmentedButtonRow(Modifier.width(420.dp)) {
                 SegmentedButton(selected = !listsTab, onClick = { listsTab = false }, shape = SegmentedButtonDefaults.itemShape(0, 2)) { Text("Dishes") }
-                SegmentedButton(selected = listsTab, onClick = { listsTab = true }, shape = SegmentedButtonDefaults.itemShape(1, 2)) { Text("Modifier lists") }
+                SegmentedButton(selected = listsTab, onClick = { listsTab = true }, shape = SegmentedButtonDefaults.itemShape(1, 2)) { Text("Modifiers & choices") }
             }
         } else {
             Banner(BannerMessage(BannerKind.INFO, "You can mark dishes sold out. Only a manager or owner can change dishes and prices."))
@@ -173,16 +173,20 @@ private fun DishRow(menu: Menu, d: MenuItem, editor: Boolean, onAvailable: (Bool
 @Composable
 private fun CategoryEditor(app: AppContainer, menu: Menu, category: MenuCategory) {
     var name by remember(category.id) { mutableStateOf(category.name) }
+    var altName by remember(category.id) { mutableStateOf(category.altName.orEmpty()) }
     var note by remember(category.id) { mutableStateOf(category.note.orEmpty()) }
     var listIds by remember(category.id) { mutableStateOf(category.modifierListIds) }
+    var groupIds by remember(category.id) { mutableStateOf(category.choiceGroupIds) }
     var saved by remember(category.id) { mutableStateOf(false) }
     val action = rememberAction()
-    val dirty = name != category.name || note != category.note.orEmpty() || listIds != category.modifierListIds
+    val dirty = name != category.name || altName != category.altName.orEmpty() || note != category.note.orEmpty() ||
+        listIds != category.modifierListIds || groupIds != category.choiceGroupIds
 
     OutlinedCard(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedTextField(name, { name = it; saved = false }, Modifier.width(240.dp), singleLine = true, label = { Text("Category") })
+                OutlinedTextField(name, { name = it; saved = false }, Modifier.width(220.dp), singleLine = true, label = { Text("Category") })
+                OutlinedTextField(altName, { altName = it; saved = false }, Modifier.width(160.dp), singleLine = true, label = { Text("Chinese") })
                 OutlinedTextField(note, { note = it; saved = false }, Modifier.weight(1f), singleLine = true, label = { Text("Note shown to the cashier, e.g. With white rice.") })
             }
             Text("Every dish here offers:", color = Muted)
@@ -190,6 +194,10 @@ private fun CategoryEditor(app: AppContainer, menu: Menu, category: MenuCategory
                 menu.modifierLists.forEach { l ->
                     val on = l.id in listIds
                     FilterChip(selected = on, onClick = { listIds = if (on) listIds - l.id else listIds + l.id; saved = false }, label = { Text(l.name) })
+                }
+                menu.choiceGroups.forEach { g ->
+                    val on = g.id in groupIds
+                    FilterChip(selected = on, onClick = { groupIds = if (on) groupIds - g.id else groupIds + g.id; saved = false }, label = { Text("${g.name} (choice)") })
                 }
             }
             action.error?.let { Banner(BannerMessage(BannerKind.ERROR, it)) }
@@ -199,7 +207,7 @@ private fun CategoryEditor(app: AppContainer, menu: Menu, category: MenuCategory
                 if (saved && !dirty) Text("Saved ✓", color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(end = 8.dp))
                 OutlinedButton(
                     enabled = dirty && !action.busy,
-                    onClick = { action.run { app.menuEditor.saveCategory(category.id, name, note, listIds); saved = true } },
+                    onClick = { action.run { app.menuEditor.saveCategory(category.id, name, note, listIds, altName, groupIds); saved = true } },
                 ) { Text("Save category") }
             }
         }
