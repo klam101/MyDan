@@ -276,7 +276,9 @@ private fun SectionList(sections: List<Section>) {
 private fun TileBox(t: Tile) {
     Box(
         Modifier
-            .size(width = 150.dp, height = 92.dp)
+            // Grows for two-line names so the price below always shows.
+            .width(150.dp)
+            .heightIn(min = 92.dp)
             .background(if (t.picked) Selected else Color.White, RoundedCornerShape(10.dp))
             .border(if (t.picked) 2.dp else 1.dp, if (t.picked) t.color else Line, RoundedCornerShape(10.dp))
             .clickable(enabled = t.enabled, onClick = t.onTap)
@@ -290,7 +292,6 @@ private fun TileBox(t: Tile) {
                 maxLines = 2, overflow = TextOverflow.Ellipsis,
             )
             t.alt?.let { Text(it, color = Muted, style = MaterialTheme.typography.bodySmall, maxLines = 1) }
-            Spacer(Modifier.weight(1f))
             if (t.price > 0) Text(money(t.price), color = Red, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold)
         }
     }

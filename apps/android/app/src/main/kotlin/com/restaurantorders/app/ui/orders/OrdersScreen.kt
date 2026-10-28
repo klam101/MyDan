@@ -143,7 +143,7 @@ fun OrdersScreen(app: AppContainer, settings: SettingsEntity, onChange: (OrderVi
                 Text("Today's orders", style = MaterialTheme.typography.headlineSmall)
                 Spacer(Modifier.weight(1f))
                 Text(
-                    "${counted.size} orders · ${orders.count { it.order.status == OrderStatus.OPEN }} cooking · " +
+                    "${counted.size} order${if (counted.size == 1) "" else "s"} ·${orders.count { it.order.status == OrderStatus.OPEN }} cooking · " +
                         "${money(counted.sumOf { it.order.totalCents })} incl. tax",
                     color = Muted,
                 )

@@ -561,9 +561,9 @@ private fun MenuPane(
                 Text(if (items.isEmpty()) "No dish matches “$search”" else "Matches for “$search”", style = MaterialTheme.typography.titleLarge)
             } else if (category != null) {
                 val (name, alt) = displayNames(category.name, category.altName, language)
-                Row(verticalAlignment = Alignment.Bottom) {
+                Column {
                     Text(name + (alt?.let { " $it" } ?: ""), style = MaterialTheme.typography.titleLarge)
-                    category.note?.let { Text("   $it", color = Muted) }
+                    category.note?.let { Text(it, color = Muted, maxLines = 1, overflow = TextOverflow.Ellipsis) }
                 }
             }
             LazyVerticalGrid(
