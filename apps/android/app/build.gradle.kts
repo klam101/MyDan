@@ -3,6 +3,12 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
+}
+
+room {
+    // Each database version is saved here, so migrations can be tested against the old schema.
+    schemaDirectory("$projectDir/schemas")
 }
 
 android {
@@ -28,8 +34,7 @@ android {
 
     testOptions {
         unitTests.isIncludeAndroidResources = true
-    }
-}
+    }}
 
 dependencies {
     implementation(project(":core"))

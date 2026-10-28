@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.withTransaction
 import com.restaurantorders.app.data.AppDatabase
+import com.restaurantorders.app.data.MIGRATIONS
 import com.restaurantorders.app.data.MenuEditor
 import com.restaurantorders.app.data.MenuRepository
 import com.restaurantorders.app.data.exportJson
@@ -55,7 +56,7 @@ class AppContainer(
 
     companion object {
         fun create(context: Context) = AppContainer(
-            Room.databaseBuilder(context, AppDatabase::class.java, "orders.db").build(),
+            Room.databaseBuilder(context, AppDatabase::class.java, "orders.db").addMigrations(*MIGRATIONS).build(),
         )
     }
 }

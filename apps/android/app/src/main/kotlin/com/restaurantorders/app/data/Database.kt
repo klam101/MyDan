@@ -1,6 +1,7 @@
 // What the tablet stores, in SQLite through Room. One restaurant per tablet.
 package com.restaurantorders.app.data
 
+import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Entity
@@ -12,6 +13,8 @@ import androidx.room.Query
 import androidx.room.RoomDatabase
 import androidx.room.Update
 import androidx.room.Upsert
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.flow.Flow
 
 /** The restaurant's settings: one row, id 1. */
@@ -32,6 +35,14 @@ data class SettingsEntity(
     val printerPort: Int = 9100,
     /** Print Chinese characters (GB18030). Turn on only after a test ticket shows they work. */
     val printerChinese: Boolean = false,
+    /** JSON list of OrderTypeSetting; empty means the built-in types. */
+    @ColumnInfo(defaultValue = "") val orderTypesJson: String = "",
+    /** JSON list of Discount the cashier can pick; empty means the built-in presets. */
+    @ColumnInfo(defaultValue = "") val discountPresetsJson: String = "",
+    /** JSON list of reasons offered when an order is voided; empty means the built-in ones. */
+    @ColumnInfo(defaultValue = "") val voidReasonsJson: String = "",
+    /** Open items above this price need a manager PIN when a cashier rings them up. */
+    @ColumnInfo(defaultValue = "2000") val openItemLimitCents: Int = 2000,
 )
 
 @Entity(tableName = "staff")
@@ -43,6 +54,8 @@ data class StaffEntity(
     /** "salt:hash" of the 4-digit PIN; see Pins. */
     val pinHash: String,
     val active: Boolean = true,
+    /** EN or ZH: which name the menu buttons show first for this person. */
+    @ColumnInfo(defaultValue = "EN") val menuLanguage: String = "EN",
 )
 
 /**
@@ -81,6 +94,12 @@ data class OrderEntity(
     val createdByName: String,
     /** Goes up by one every time the order is changed. */
     val version: Int = 1,
+    /** JSON Discount taken off before tax, or null. */
+    val discountJson: String? = null,
+    val voidReason: String? = null,
+    val voidedByName: String? = null,
+    /** JSON list of Approval: who let a cashier void, discount or change a price. */
+    @ColumnInfo(defaultValue = "[]") val approvalsJson: String = "[]",
 )
 
 @Entity(tableName = "print_jobs", indices = [Index("orderId")])
@@ -195,8 +214,8 @@ interface PrintJobDao {
 
 @Database(
     entities = [SettingsEntity::class, StaffEntity::class, MenuEntity::class, OrderEntity::class, PrintJobEntity::class],
-    version = 1,
-    exportSchema = false,
+    version = 2,
+    exportSchema = true,
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun settings(): SettingsDao
@@ -205,3 +224,23 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun orders(): OrderDao
     abstract fun printJobs(): PrintJobDao
 }
+
+/**
+ * Every schema change gets a migration, so an app update never loses the restaurant's data.
+ * Old schemas are kept in app/schemas; DatabaseMigrationTest upgrades one that has real rows.
+ */
+val MIGRATIONS = arrayOf(
+    object : Migration(1, 2) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE settings ADD COLUMN orderTypesJson TEXT NOT NULL DEFAULT ''")
+            db.execSQL("ALTER TABLE settings ADD COLUMN discountPresetsJson TEXT NOT NULL DEFAULT ''")
+            db.execSQL("ALTER TABLE settings ADD COLUMN voidReasonsJson TEXT NOT NULL DEFAULT ''")
+            db.execSQL("ALTER TABLE settings ADD COLUMN openItemLimitCents INTEGER NOT NULL DEFAULT 2000")
+            db.execSQL("ALTER TABLE staff ADD COLUMN menuLanguage TEXT NOT NULL DEFAULT 'EN'")
+            db.execSQL("ALTER TABLE orders ADD COLUMN discountJson TEXT")
+            db.execSQL("ALTER TABLE orders ADD COLUMN voidReason TEXT")
+            db.execSQL("ALTER TABLE orders ADD COLUMN voidedByName TEXT")
+            db.execSQL("ALTER TABLE orders ADD COLUMN approvalsJson TEXT NOT NULL DEFAULT '[]'")
+        }
+    },
+)

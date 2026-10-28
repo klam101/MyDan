@@ -19,6 +19,11 @@ val Warn = Color(0xFF92400E)
 val WarnSoft = Color(0xFFFEF3C7)
 val Info = Color(0xFF1E40AF)
 val InfoSoft = Color(0xFFDBEAFE)
+/** The side rail and category buttons: a deep navy, as on Front. */
+val Rail = Color(0xFF1F2A44)
+val RailActive = Color(0xFF34436A)
+/** The selected cart line, Front's yellow. */
+val Selected = Color(0xFFFDE68A)
 
 /** NO in red, ADD/SUB in green, EXTRA in blue, LIGHT/ON SIDE in amber, as in the web app. */
 fun premodColor(action: PreModifier): Color = when (action) {
