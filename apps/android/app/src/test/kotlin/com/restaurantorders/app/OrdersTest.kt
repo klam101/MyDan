@@ -31,6 +31,7 @@ import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @RunWith(RobolectricTestRunner::class)
@@ -130,12 +131,26 @@ class OrdersTest {
     }
 
     @Test
-    fun `refuses empty orders, phone orders without a name, and sold-out dishes`() = runBlocking {
-        assertFailsWith<ActionException> { app.orders.create(OrderInput(OrderType.WALK_IN, lines = emptyList())) }
+    fun `a name or phone is only needed when the owner asks for it`() = runBlocking {
+        // The kitchen doesn't need the customer, so by default no type asks for them.
+        val (view, _) = app.orders.create(OrderInput(OrderType.PICK_UP, lines = listOf(loMein())))
+        assertNull(view.order.customerName)
+
+        val settings = app.settings.get()
+        val strict = settings.orderTypes.map { if (it.type == OrderType.PHONE) it.copy(enabled = true, requireCustomer = true) else it }
+        app.settings.save(settings.withLists(strict, settings.discountPresets, settings.voidReasons))
         assertContains(
             assertFailsWith<ActionException> { app.orders.create(OrderInput(OrderType.PHONE, lines = listOf(loMein()))) }.message!!,
-            "Phone order",
+            "Phone order needs",
         )
+        app.orders.create(OrderInput(OrderType.PHONE, customerPhone = "803-537-9377", lines = listOf(loMein())))
+        app.orders.create(OrderInput(OrderType.PICK_UP, lines = listOf(loMein())))
+        Unit
+    }
+
+    @Test
+    fun `refuses empty orders and sold-out dishes`() = runBlocking {
+        assertFailsWith<ActionException> { app.orders.create(OrderInput(OrderType.WALK_IN, lines = emptyList())) }
         app.menu.setAvailable(loMein().menuItemId, false)
         assertContains(assertFailsWith<OrderException> { app.orders.create(OrderInput(OrderType.WALK_IN, lines = listOf(loMein()))) }.message!!, "sold out")
     }
@@ -221,7 +236,7 @@ class OrdersTest {
     @Test
     fun `order types use the restaurant's names, and pick-ups need a customer (B7)`() = runBlocking {
         val settings = app.settings.get()
-        val renamed = settings.orderTypes.map { if (it.type == OrderType.PICK_UP) it.copy(name = "Call-in") else it }
+        val renamed = settings.orderTypes.map { if (it.type == OrderType.PICK_UP) it.copy(name = "Call-in", requireCustomer = true) else it }
         app.settings.save(settings.withLists(renamed, settings.discountPresets, settings.voidReasons))
         assertContains(assertFailsWith<ActionException> { app.orders.create(OrderInput(OrderType.PICK_UP, lines = listOf(loMein()))) }.message!!, "Call-in order needs")
         val (_, job) = app.orders.create(OrderInput(OrderType.PICK_UP, customerPhone = "803-537-9377", lines = listOf(loMein())))

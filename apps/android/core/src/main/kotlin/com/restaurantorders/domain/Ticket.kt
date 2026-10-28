@@ -23,8 +23,9 @@ private fun names(name: String, altName: String?, language: TicketLanguage): Str
 private fun dishLines(line: OrderLine, language: TicketLanguage, mark: String = ""): List<TicketLine> = buildList {
     val code = if (line.code.isNotEmpty()) "${line.code} " else ""
     add(TicketLine("$mark${line.quantity} x $code${names(line.name, line.altName, language)}", LineStyle.TALL, bold = true))
-    if (line.options.isNotEmpty()) {
-        add(TicketLine("   ${line.options.joinToString(" / ") { it.name }.uppercase()}", LineStyle.TALL, bold = true))
+    val shown = line.options.filter { !it.inName }
+    if (shown.isNotEmpty()) {
+        add(TicketLine("   ${shown.joinToString(" / ") { it.name }.uppercase()}", LineStyle.TALL, bold = true))
     }
     for (c in line.choices) {
         val alt = if (language != TicketLanguage.EN && !c.altName.isNullOrEmpty()) " ${c.altName}" else ""

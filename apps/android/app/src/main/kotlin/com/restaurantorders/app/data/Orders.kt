@@ -268,7 +268,7 @@ class OrderRepository(
         if (input.lines.isEmpty()) throw ActionException("An order needs at least one dish")
         val name = input.customerName.trim().ifEmpty { null }
         val phone = input.customerPhone.trim().ifEmpty { null }
-        if (input.type.needsCustomer && name == null && phone == null) {
+        if (settings.requiresCustomer(input.type) && name == null && phone == null) {
             throw ActionException("A ${settings.typeName(input.type)} order needs the customer's name or phone number")
         }
         val current = menu.get()

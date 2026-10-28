@@ -59,6 +59,7 @@ import com.restaurantorders.app.AppContainer
 import com.restaurantorders.app.data.SettingsEntity
 import com.restaurantorders.app.data.Staff
 import com.restaurantorders.app.data.enabledOrderTypes
+import com.restaurantorders.app.data.requiresCustomer
 import com.restaurantorders.app.data.discountPresets
 import com.restaurantorders.app.data.typeColor
 import com.restaurantorders.app.data.typeName
@@ -347,14 +348,16 @@ private fun CartPane(
                 }
             }
             Column(Modifier.padding(horizontal = 12.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                // Optional unless the owner made this order type require it (Settings → Ordering).
+                val required = settings.requiresCustomer(cart.type)
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    OutlinedTextField(cart.customerName, { cart.customerName = it }, Modifier.weight(1f), singleLine = true, placeholder = { Text("Name") })
+                    OutlinedTextField(cart.customerName, { cart.customerName = it }, Modifier.weight(1f), singleLine = true, placeholder = { Text(if (required) "Name (required)" else "Name") })
                     OutlinedTextField(
                         cart.customerPhone, { cart.customerPhone = it }, Modifier.weight(1f), singleLine = true, placeholder = { Text("Phone") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                     )
                 }
-                if (cart.type.needsCustomer) {
+                if (cart.type.takesPickupTime) {
                     val pickup = cart.pickupAt
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalArrangement = Arrangement.Center) {
                         Text("Ready " + (pickup?.let { CLOCK.format(it.atZone(settings.zone)) } ?: "ASAP"), fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 14.dp, end = 4.dp))
@@ -450,7 +453,7 @@ private fun CartLineRow(p: Preview, selected: Boolean, language: TicketLanguage,
                 val code = if (line.code.isNotEmpty()) "${line.code}. " else if (line.open) "Open: " else ""
                 Text(code + name, fontWeight = FontWeight.SemiBold)
                 alt?.let { Text(code + it, color = Muted, style = MaterialTheme.typography.bodySmall) }
-                if (line.options.isNotEmpty()) Text(line.options.joinToString(" · ") { it.name }, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodySmall)
+                line.options.filter { !it.inName }.takeIf { it.isNotEmpty() }?.let { shown -> Text(shown.joinToString(" · ") { it.name }, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodySmall) }
                 line.choices.forEach { c ->
                     Text(c.name + if (c.priceCents > 0) "  +${money(c.priceCents)}" else "", style = MaterialTheme.typography.bodySmall)
                 }

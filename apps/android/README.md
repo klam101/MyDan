@@ -47,7 +47,8 @@ The screens are laid out like Front, the register the restaurant uses today.
 - **Change or void:** in **Orders**, tap the order. **Change order** prints a CHANGED ticket
   that marks what is new (+), changed (\*) and removed (-). **Void order** asks for a reason and
   prints a VOID ticket; the order stays in the list, greyed out.
-- **Settings → Ordering:** turn order types on or off, rename them and pick their colour; edit
+- **Settings → Ordering:** turn order types on or off, rename them, pick their colour and choose
+  whether Send needs a name or phone (off unless you tick it); edit
   discount presets, void reasons and the open-item limit. Choice groups and kitchen-instruction
   lists are under **Menu → Modifiers & choices**.
 - **Sold out:** in **Menu**, flip the dish's switch. Every role can do this.

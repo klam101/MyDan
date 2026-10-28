@@ -15,13 +15,20 @@ fun buildLine(menu: Menu, input: NewOrderLine, newId: () -> String): OrderLine {
     val (item, category) = findItem(menu, input.menuItemId) ?: throw OrderException("That dish is no longer on the menu")
     if (!item.available) throw OrderException("${item.name} is sold out")
 
+    var name = item.name
+    var altName = item.altName
     val options = item.optionGroups.map { group ->
         val picked = group.options.filter { it.id in input.optionIds }
         if (picked.size != 1) {
             val what = if (group.name == MenuOptionGroup.CHOICE) "choice" else group.name.lowercase()
             throw OrderException("Pick one $what for ${item.name}")
         }
-        LineOption(picked[0].id, group.name, picked[0].name, picked[0].extraCents, picked[0].altName)
+        val named = if (group.name == MenuOptionGroup.CHOICE) pickedName(item.name, item.altName, group.options, picked[0].id) else null
+        if (named != null) {
+            name = named.first
+            altName = named.second
+        }
+        LineOption(picked[0].id, group.name, picked[0].name, picked[0].extraCents, picked[0].altName, inName = named != null)
     }
     if (input.optionIds.size != options.size) throw OrderException("${item.name} has an option that doesn't belong to it")
 
@@ -44,8 +51,8 @@ fun buildLine(menu: Menu, input: NewOrderLine, newId: () -> String): OrderLine {
         id = input.lineId ?: newId(),
         menuItemId = item.id,
         code = item.code,
-        name = item.name,
-        altName = item.altName,
+        name = name,
+        altName = altName,
         quantity = input.quantity,
         basePriceCents = item.priceCents,
         options = options,
@@ -54,6 +61,27 @@ fun buildLine(menu: Menu, input: NewOrderLine, newId: () -> String): OrderLine {
         choices = choices,
         overrideCents = input.unitPriceCents,
     )
+}
+
+/**
+ * The dish's name with "X or Y" replaced by what was picked: "Roast Pork or Chicken Lo Mein"
+ * with Roast Pork reads "Roast Pork Lo Mein", and 叉或雞撈麵 reads 叉撈麵 (the characters either
+ * side of 或 are the choices, in the same order). Null when the name doesn't spell the choices
+ * that way; the choice then keeps its own line.
+ */
+fun pickedName(name: String, altName: String?, options: List<MenuOption>, pickedId: String): Pair<String, String?>? {
+    val index = options.indexOfFirst { it.id == pickedId }
+    if (index < 0) return null
+    val either = options.joinToString(" or ") { it.name }
+    if (options.size < 2 || !name.contains(either)) return null
+    val english = name.replace(either, options[index].name)
+    val chinese = altName?.let { alt ->
+        val at = alt.indexOf('或')
+        if (options.size != 2 || at < 1 || at >= alt.length - 1 || alt.indexOf('或', at + 1) >= 0) return@let alt
+        val pick = if (index == 0) alt[at - 1] else alt[at + 1]
+        alt.substring(0, at - 1) + pick + alt.substring(at + 2)
+    }
+    return english to chinese
 }
 
 private fun openLine(open: OpenItem, input: NewOrderLine, newId: () -> String): OrderLine {

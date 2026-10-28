@@ -113,7 +113,8 @@ fun ModifierScreen(
 
     val draft = initial.copy(quantity = quantity, optionIds = optionIds, choiceIds = choiceIds, modifiers = picks, note = note.ifBlank { null })
     val built = runCatching { buildLine(menu, draft) { "preview" } }
-    val (title, subtitle) = displayNames(item.name, item.altName, language)
+    // "Roast Pork Lo Mein" once the choice is picked, as on the ticket.
+    val (title, subtitle) = built.getOrNull()?.let { displayNames(it.name, it.altName, language) } ?: displayNames(item.name, item.altName, language)
 
     fun names(name: String, alt: String?) = displayNames(name, alt, language)
 
@@ -172,7 +173,8 @@ fun ModifierScreen(
                     LazyColumn(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         val line = built.getOrNull()
                         if (line != null) {
-                            items(line.options.size) { i -> Text(line.options[i].name, fontWeight = FontWeight.SemiBold) }
+                            val shown = line.options.filter { !it.inName }
+                            items(shown.size) { i -> Text(shown[i].name, fontWeight = FontWeight.SemiBold) }
                             items(line.choices.size) { i ->
                                 val c = line.choices[i]
                                 Row { Text(c.name, Modifier.weight(1f)); if (c.priceCents > 0) Text("+${money(c.priceCents)}") }

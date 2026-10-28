@@ -116,10 +116,11 @@ data class Menu(
 )
 
 /**
- * How the customer gets the order. The restaurant names them and turns them on or off in
- * Settings (backlog B7). PHONE and PICK_UP orders need a name or phone number.
+ * How the customer gets the order. The restaurant names them, turns them on or off and chooses
+ * whether they need a name or phone in Settings (backlog B7). PICK_UP and PHONE orders can have
+ * a pickup time.
  */
-enum class OrderType(val defaultName: String, val needsCustomer: Boolean) {
+enum class OrderType(val defaultName: String, val takesPickupTime: Boolean) {
     PICK_UP("Pick Up", true),
     WALK_IN("Walk In", false),
     PHONE("Phone", true),
@@ -157,7 +158,15 @@ data class NewOrderLine(
 )
 
 @Serializable
-data class LineOption(val optionId: String, val group: String, val name: String, val extraCents: Int, val altName: String? = null)
+data class LineOption(
+    val optionId: String,
+    val group: String,
+    val name: String,
+    val extraCents: Int,
+    val altName: String? = null,
+    /** Already in the dish's name ("Roast Pork Lo Mein"), so it isn't shown again on its own line. */
+    val inName: Boolean = false,
+)
 
 @Serializable
 data class LineChoice(val choiceId: String, val group: String, val name: String, val altName: String?, val priceCents: Int)

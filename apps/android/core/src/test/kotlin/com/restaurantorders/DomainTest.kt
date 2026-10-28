@@ -42,6 +42,9 @@ import com.restaurantorders.domain.TicketKind
 import com.restaurantorders.domain.TicketLanguage
 import com.restaurantorders.domain.Totals
 import com.restaurantorders.domain.buildLine
+import com.restaurantorders.domain.lineChanged
+import com.restaurantorders.domain.lineInput
+import com.restaurantorders.domain.pickedName
 import com.restaurantorders.domain.buildTicket
 import com.restaurantorders.domain.can
 import com.restaurantorders.domain.canManage
@@ -306,5 +309,52 @@ class DomainTest {
         assertEquals(listOf("Comb & Lunch Choice", "Something Extra"), groups)
         assertEquals("組合拼盤", combo.altName)
         assertEquals(listOf("Meat", "Cook", "Vegetables", "Sauce & spice"), starter.modifierLists.map { it.name })
+    }
+    // "Roast Pork or Chicken Lo Mein": the cashier picks one, and the ticket names only that.
+    private val l2 = MenuItem(
+        id = "l2", categoryId = "c1", code = "L2", name = "Roast Pork or Chicken Lo Mein", altName = "叉或雞撈麵", priceCents = 605,
+        spicy = false, available = true,
+        optionGroups = listOf(MenuOptionGroup(MenuOptionGroup.CHOICE, listOf(MenuOption("rp", "Roast Pork", 0), MenuOption("ck", "Chicken", 0)))),
+        modifierListIds = emptyList(),
+    )
+    private val sized = loMein.copy(
+        id = "24", code = "24", name = "Chicken or Roast Pork Lo Mein", altName = "雞或叉撈麵",
+        optionGroups = loMein.optionGroups + MenuOptionGroup(MenuOptionGroup.CHOICE, listOf(MenuOption("c", "Chicken", 0), MenuOption("r", "Roast Pork", 0))),
+    )
+    private val nameMenu = menu.copy(categories = listOf(category.copy(items = listOf(l2, sized, hunan.copy(categoryId = "c1")))))
+
+    @Test
+    fun `an either-or dish is named by the pick, in English and Chinese`() {
+        val line = buildLine(nameMenu, NewOrderLine("l2", 1, listOf("rp")), id)
+        assertEquals("Roast Pork Lo Mein", line.name)
+        assertEquals("叉撈麵", line.altName)
+        assertEquals("Chicken Lo Mein" to "雞撈麵", buildLine(nameMenu, NewOrderLine("l2", 1, listOf("ck")), id).let { it.name to it.altName })
+        val text = buildTicket(order(listOf(line)), TicketKind.NEW, TicketLanguage.BOTH, zone).map { it.text }
+        assertContains(text, "1 x L2 Roast Pork Lo Mein 叉撈麵")
+        assertTrue(text.none { "ROAST PORK" in it })
+    }
+
+    @Test
+    fun `sizes still print when the choice is in the name`() {
+        val line = buildLine(nameMenu, NewOrderLine("24", 1, listOf("qt", "c")), id)
+        assertEquals("Chicken Lo Mein", line.name)
+        val text = buildTicket(order(listOf(line)), TicketKind.NEW, TicketLanguage.EN, zone).map { it.text }
+        assertContains(text, "1 x 24 Chicken Lo Mein")
+        assertContains(text, "   QT")
+        // Switching Chicken to Roast Pork is a change the kitchen must see.
+        val switched = buildLine(nameMenu, lineInput(line).copy(optionIds = listOf("qt", "r")), id)
+        assertEquals("Roast Pork Lo Mein", switched.name)
+        assertTrue(lineChanged(line, switched))
+    }
+
+    @Test
+    fun `a name that doesn't spell the choices keeps the choice line`() {
+        val oddly = l2.copy(name = "Lo Mein with meat", altName = "撈麵")
+        val m = nameMenu.copy(categories = listOf(category.copy(items = listOf(oddly))))
+        val line = buildLine(m, NewOrderLine("l2", 1, listOf("rp")), id)
+        assertEquals("Lo Mein with meat", line.name)
+        assertContains(buildTicket(order(listOf(line)), TicketKind.NEW, TicketLanguage.EN, zone).map { it.text }, "   ROAST PORK")
+        assertNull(pickedName("Curry Chicken or Beef", "咖喱雞或牛", listOf(MenuOption("a", "Chicken", 0)), "a"))
+        assertEquals("Curry Beef" to "咖喱牛", pickedName("Curry Chicken or Beef", "咖喱雞或牛", listOf(MenuOption("a", "Chicken", 0), MenuOption("b", "Beef", 0)), "b"))
     }
 }

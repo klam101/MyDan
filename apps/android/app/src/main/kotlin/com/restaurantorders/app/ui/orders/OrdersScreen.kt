@@ -284,7 +284,7 @@ private fun OrderDetail(app: AppContainer, settings: SettingsEntity, v: OrderVie
                     }
                 }
                 val indent = Modifier.padding(start = 28.dp)
-                if (line.options.isNotEmpty()) Text(line.options.joinToString(" · ") { it.name }, indent, fontWeight = FontWeight.SemiBold)
+                line.options.filter { !it.inName }.takeIf { it.isNotEmpty() }?.let { shown -> Text(shown.joinToString(" · ") { it.name }, indent, fontWeight = FontWeight.SemiBold) }
                 line.choices.forEach { c -> Text(c.name + if (c.priceCents > 0) "  +${money(c.priceCents)}" else "", indent) }
                 line.modifiers.forEach { m -> Text(describeModifier(m.action, m.name), indent, color = premodColor(m.action), fontWeight = FontWeight.Bold) }
                 line.note?.let { Text("“$it”", indent, color = Warn) }

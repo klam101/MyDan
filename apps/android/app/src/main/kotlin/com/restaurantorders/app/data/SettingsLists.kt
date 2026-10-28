@@ -6,9 +6,19 @@ import com.restaurantorders.domain.Discount
 import com.restaurantorders.domain.OrderType
 import kotlinx.serialization.Serializable
 
-/** One of the restaurant's order types (backlog B7): its name, colour and whether it is used. */
+/**
+ * One of the restaurant's order types (backlog B7): its name, colour, whether it is used, and
+ * whether Send needs the customer's name or phone. The kitchen doesn't, so that is off unless
+ * the owner turns it on.
+ */
 @Serializable
-data class OrderTypeSetting(val type: OrderType, val name: String, val color: Long, val enabled: Boolean)
+data class OrderTypeSetting(
+    val type: OrderType,
+    val name: String,
+    val color: Long,
+    val enabled: Boolean,
+    val requireCustomer: Boolean = false,
+)
 
 /** Front's two lanes are on; Phone and Dine In can be turned on in Settings. */
 val DEFAULT_ORDER_TYPES = listOf(
@@ -38,6 +48,8 @@ val SettingsEntity.enabledOrderTypes: List<OrderTypeSetting> get() = orderTypes.
 fun SettingsEntity.typeName(type: OrderType): String = orderTypes.first { it.type == type }.name
 
 fun SettingsEntity.typeColor(type: OrderType): Long = orderTypes.first { it.type == type }.color
+
+fun SettingsEntity.requiresCustomer(type: OrderType): Boolean = orderTypes.first { it.type == type }.requireCustomer
 
 val SettingsEntity.discountPresets: List<Discount> get() = parsed(discountPresetsJson, DEFAULT_DISCOUNTS)
 

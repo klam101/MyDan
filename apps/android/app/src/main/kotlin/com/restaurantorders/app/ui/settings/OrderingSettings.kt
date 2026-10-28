@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -63,7 +64,8 @@ fun OrderTypesEditor(types: List<OrderTypeSetting>, onChange: (List<OrderTypeSet
                         .clickable { update(t.copy(color = c)) },
                 )
             }
-            if (t.type.needsCustomer) Text("needs a name or phone", color = Muted)
+            Checkbox(t.requireCustomer, { update(t.copy(requireCustomer = it)) })
+            Text("Require name or phone", color = if (t.requireCustomer) Ink else Muted)
         }
     }
 }
