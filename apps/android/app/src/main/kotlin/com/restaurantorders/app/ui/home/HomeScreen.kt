@@ -90,7 +90,7 @@ fun HomeScreen(app: AppContainer, settings: SettingsEntity, staff: Staff) {
             LocalNetworkBanner()
             Box(Modifier.weight(1f)) {
                 when (tab) {
-                    Tab.NEW_ORDER -> NewOrderScreen(app, settings, cart, onChangeSaved = { tab = Tab.ORDERS })
+                    Tab.NEW_ORDER -> NewOrderScreen(app, settings, staff, cart, onChangeSaved = { tab = Tab.ORDERS })
                     Tab.ORDERS -> OrdersScreen(app, settings, onChange = { view -> cart.load(view); tab = Tab.NEW_ORDER })
                     Tab.MENU -> MenuScreen(app, staff)
                     Tab.STAFF -> StaffScreen(app, staff)

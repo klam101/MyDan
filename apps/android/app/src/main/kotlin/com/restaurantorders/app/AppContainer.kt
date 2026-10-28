@@ -38,7 +38,7 @@ class AppContainer(
 
     /** Lives as long as the app; work started here isn't cancelled when a screen closes. */
     val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-    val orders = OrderRepository(db, menu, printing, session, appScope, now)
+    val orders = OrderRepository(db, menu, staff, printing, session, appScope, now)
 
     /** Everything on the tablet as JSON (owners only). */
     suspend fun export(): String = exportJson(db, session, now())

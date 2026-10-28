@@ -4,7 +4,14 @@ import com.restaurantorders.app.data.ActionException
 import com.restaurantorders.app.data.AppJson
 import com.restaurantorders.app.data.OrderInput
 import com.restaurantorders.app.printing.PrintStatus
+import com.restaurantorders.app.data.discountPresets
+import com.restaurantorders.app.data.orderTypes
+import com.restaurantorders.app.data.voidReasons
+import com.restaurantorders.app.data.withLists
+import com.restaurantorders.domain.Discount
 import com.restaurantorders.domain.ModifierPick
+import com.restaurantorders.domain.OpenItem
+import com.restaurantorders.domain.Permission
 import com.restaurantorders.domain.NewOrderLine
 import com.restaurantorders.domain.OrderException
 import com.restaurantorders.domain.OrderStatus
@@ -101,9 +108,9 @@ class OrdersTest {
     }
 
     @Test
-    fun `cancelling prints CANCELLED and closes the order`() = runBlocking {
+    fun `voiding prints VOID and closes the order`() = runBlocking {
         val (created, _) = app.orders.create(OrderInput(OrderType.WALK_IN, lines = listOf(loMein())))
-        val (cancelled, job) = app.orders.cancel(created.order.id)
+        val (cancelled, job) = app.orders.cancel(created.order.id, "Wrong order")
         assertEquals(OrderStatus.CANCELLED, cancelled.order.status)
         assertEquals("CANCELLED", job.kind)
         assertContains(ticketText(job.ticketJson)[0], "VOID")
@@ -127,7 +134,7 @@ class OrdersTest {
         assertFailsWith<ActionException> { app.orders.create(OrderInput(OrderType.WALK_IN, lines = emptyList())) }
         assertContains(
             assertFailsWith<ActionException> { app.orders.create(OrderInput(OrderType.PHONE, lines = listOf(loMein()))) }.message!!,
-            "phone order",
+            "Phone order",
         )
         app.menu.setAvailable(loMein().menuItemId, false)
         assertContains(assertFailsWith<OrderException> { app.orders.create(OrderInput(OrderType.WALK_IN, lines = listOf(loMein()))) }.message!!, "sold out")
@@ -140,5 +147,86 @@ class OrdersTest {
         val (view, _) = app.orders.create(OrderInput(OrderType.PHONE, customerName = "Kim", lines = listOf(loMein())))
         assertEquals("Tony", view.createdByName)
         assertEquals("Kim", view.order.customerName)
+    }
+    /** A cashier (Tony, 3333) signed in, with a manager (Mei, 2222) to approve. */
+    private suspend fun cashierWithManager(): String {
+        val manager = app.staff.add("Mei", Role.MANAGER, "2222")
+        app.staff.add("Tony", Role.CASHIER, "3333")
+        app.staff.signIn("3333")
+        return manager.id
+    }
+
+    @Test
+    fun `a cashier's price change or discount needs a manager, who is recorded (A4, B4, B5)`() = runBlocking {
+        val managerId = cashierWithManager()
+        val cheaper = loMein().copy(unitPriceCents = 800)
+        val input = OrderInput(OrderType.WALK_IN, lines = listOf(cheaper), discount = Discount("family", percent = 10.0))
+        assertEquals(setOf(Permission.PRICE, Permission.DISCOUNT), app.orders.approvalsNeeded(null, input).map { it.permission }.toSet())
+        assertContains(assertFailsWith<ActionException> { app.orders.create(input) }.message!!, "manager's PIN")
+
+        val approved = input.copy(approvedBy = mapOf(Permission.PRICE to managerId, Permission.DISCOUNT to managerId))
+        val (view, job) = app.orders.create(approved)
+        // $8.00, 10 % off before tax: $7.20 + 8.875 % tax.
+        assertEquals(800, view.order.subtotalCents)
+        assertEquals(80, view.order.discountCents)
+        assertEquals(64, view.order.taxCents)
+        assertEquals(784, view.order.totalCents)
+        assertEquals(listOf("Mei" to "Tony", "Mei" to "Tony"), view.approvals.map { it.byName to it.forName })
+        assertContains(ticketText(job.ticketJson), "DISCOUNT: 10 % family")
+        // Changing the order without touching the price or discount needs no new approval.
+        val again = view.order.lines.map { lineInput(it) }
+        assertEquals(emptyList(), app.orders.approvalsNeeded(view.order.id, input.copy(lines = again)))
+    }
+
+    @Test
+    fun `taking away a dish the kitchen has needs a manager (E4)`() = runBlocking {
+        val managerId = cashierWithManager()
+        val (created, _) = app.orders.create(OrderInput(OrderType.WALK_IN, lines = listOf(loMein(2))))
+        val fewer = OrderInput(OrderType.WALK_IN, lines = listOf(lineInput(created.order.lines[0]).copy(quantity = 1)))
+        assertEquals(listOf(Permission.VOID), app.orders.approvalsNeeded(created.order.id, fewer).map { it.permission })
+        assertFailsWith<ActionException> { app.orders.update(created.order.id, fewer) }
+        val (changed, _) = app.orders.update(created.order.id, fewer.copy(approvedBy = mapOf(Permission.VOID to managerId)))
+        assertEquals(1, changed.order.lines[0].quantity)
+        // Adding more needs nobody.
+        val more = OrderInput(OrderType.WALK_IN, lines = listOf(lineInput(changed.order.lines[0]).copy(quantity = 3)))
+        assertEquals(emptyList(), app.orders.approvalsNeeded(created.order.id, more))
+    }
+
+    @Test
+    fun `voiding asks a reason and a manager, and prints VOID (E5)`() = runBlocking {
+        val managerId = cashierWithManager()
+        val (created, _) = app.orders.create(OrderInput(OrderType.WALK_IN, lines = listOf(loMein())))
+        assertFailsWith<ActionException> { app.orders.cancel(created.order.id, "Customer left") }
+        assertContains(assertFailsWith<ActionException> { app.orders.cancel(created.order.id, " ", managerId) }.message!!, "reason")
+        val (voided, job) = app.orders.cancel(created.order.id, "Customer left", managerId)
+        assertEquals("Customer left", voided.order.voidReason)
+        assertEquals("Mei", voided.voidedByName)
+        assertContains(ticketText(job.ticketJson), "REASON: Customer left")
+        assertEquals("Void: Customer left", voided.approvals.last().what)
+    }
+
+    @Test
+    fun `open items over the Settings limit need a manager (B2)`() = runBlocking {
+        val managerId = cashierWithManager()
+        val cup = NewOrderLine("", 1, openItem = OpenItem("Sauce cup", null, 50))
+        assertEquals(emptyList(), app.orders.approvalsNeeded(null, OrderInput(OrderType.WALK_IN, lines = listOf(cup))))
+        val tray = NewOrderLine("", 1, openItem = OpenItem("Party tray", null, 4500))
+        val input = OrderInput(OrderType.WALK_IN, lines = listOf(tray))
+        assertEquals(listOf(Permission.PRICE), app.orders.approvalsNeeded(null, input).map { it.permission })
+        val (view, job) = app.orders.create(input.copy(approvedBy = mapOf(Permission.PRICE to managerId)))
+        assertTrue(view.order.lines.single().open)
+        assertContains(ticketText(job.ticketJson), "1 x Party tray")
+    }
+
+    @Test
+    fun `order types use the restaurant's names, and pick-ups need a customer (B7)`() = runBlocking {
+        val settings = app.settings.get()
+        val renamed = settings.orderTypes.map { if (it.type == OrderType.PICK_UP) it.copy(name = "Call-in") else it }
+        app.settings.save(settings.withLists(renamed, settings.discountPresets, settings.voidReasons))
+        assertContains(assertFailsWith<ActionException> { app.orders.create(OrderInput(OrderType.PICK_UP, lines = listOf(loMein()))) }.message!!, "Call-in order needs")
+        val (_, job) = app.orders.create(OrderInput(OrderType.PICK_UP, customerPhone = "803-537-9377", lines = listOf(loMein())))
+        assertContains(ticketText(job.ticketJson), "#1  CALL-IN")
+        val off = settings.orderTypes.map { it.copy(enabled = false) }
+        assertContains(assertFailsWith<ActionException> { settings.withLists(off, emptyList(), emptyList()) }.message!!, "at least one")
     }
 }

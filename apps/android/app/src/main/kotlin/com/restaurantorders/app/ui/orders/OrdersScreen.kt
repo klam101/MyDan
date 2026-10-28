@@ -1,5 +1,12 @@
 package com.restaurantorders.app.ui.orders
 
+import androidx.compose.ui.draw.alpha
+import com.restaurantorders.app.data.typeName
+import com.restaurantorders.app.data.voidReasons
+import com.restaurantorders.app.ui.order.StruckPrice
+import com.restaurantorders.app.ui.pin.ApprovalDialog
+import com.restaurantorders.domain.describeDiscount
+import com.restaurantorders.domain.menuUnitPrice
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -85,7 +92,7 @@ private val STATUS_LABEL = mapOf(
     OrderStatus.OPEN to "Cooking",
     OrderStatus.READY to "Ready",
     OrderStatus.PICKED_UP to "Picked up",
-    OrderStatus.CANCELLED to "Cancelled",
+    OrderStatus.CANCELLED to "Voided",
 )
 
 @Composable
@@ -103,8 +110,8 @@ fun StatusBadge(status: OrderStatus) {
     )
 }
 
-private fun customerLine(order: Order) =
-    listOfNotNull(if (order.type == OrderType.PHONE) "Phone" else "Walk-in", order.customerName, order.customerPhone).joinToString(" · ")
+private fun customerLine(order: Order, settings: SettingsEntity) =
+    listOfNotNull(settings.typeName(order.type), order.customerName, order.customerPhone).joinToString(" · ")
 
 /** Today's orders on the left, the chosen one on the right. Port of OrdersScreen + OrderDetail. */
 @OptIn(ExperimentalLayoutApi::class)
@@ -150,13 +157,21 @@ fun OrdersScreen(app: AppContainer, settings: SettingsEntity, onChange: (OrderVi
             OutlinedTextField(search, { search = it }, Modifier.fillMaxWidth(), singleLine = true, placeholder = { Text("Order #, name or phone") })
             action.error?.let { Banner(BannerMessage(BannerKind.ERROR, it)) }
             if (shown.isEmpty()) Text("No orders here yet", color = Muted, modifier = Modifier.padding(24.dp))
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            LazyColumn(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(shown, key = { it.order.id }) { v ->
                     OrderCard(
-                        v, settings.zone, ticketStatus[v.order.id], selected = v.order.id == selectedId,
+                        v, settings, ticketStatus[v.order.id], selected = v.order.id == selectedId,
                         onClick = { selectedId = v.order.id },
                         onNext = { next -> action.run { app.orders.setStatus(v.order.id, next) } },
                     )
+                }
+            }
+            // Front's totals strip: count and amount for each status in the list shown (E3).
+            HorizontalDivider()
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+                OrderStatus.entries.forEach { s ->
+                    val these = shown.filter { it.order.status == s }
+                    Text("${these.size} ${STATUS_LABEL.getValue(s)}, ${money(these.sumOf { it.order.totalCents })}", color = if (these.isEmpty()) Muted else MaterialTheme.colorScheme.onSurface)
                 }
             }
         }
@@ -172,8 +187,9 @@ fun OrdersScreen(app: AppContainer, settings: SettingsEntity, onChange: (OrderVi
 }
 
 @Composable
-private fun OrderCard(v: OrderView, zone: ZoneId, ticket: String?, selected: Boolean, onClick: () -> Unit, onNext: (OrderStatus) -> Unit) {
+private fun OrderCard(v: OrderView, settings: SettingsEntity, ticket: String?, selected: Boolean, onClick: () -> Unit, onNext: (OrderStatus) -> Unit) {
     val o = v.order
+    val zone = settings.zone
     val next = when (o.status) {
         OrderStatus.OPEN -> OrderStatus.READY to "Mark ready"
         OrderStatus.READY -> OrderStatus.PICKED_UP to "Picked up"
@@ -182,7 +198,8 @@ private fun OrderCard(v: OrderView, zone: ZoneId, ticket: String?, selected: Boo
     OutlinedCard(
         onClick = onClick,
         border = BorderStroke(if (selected) 2.dp else 1.dp, if (selected) Red else Line),
-        modifier = Modifier.fillMaxWidth(),
+        // Voided orders stay in the list, greyed out (E5).
+        modifier = Modifier.fillMaxWidth().alpha(if (o.status == OrderStatus.CANCELLED) 0.55f else 1f),
     ) {
         Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
@@ -194,7 +211,7 @@ private fun OrderCard(v: OrderView, zone: ZoneId, ticket: String?, selected: Boo
                     Spacer(Modifier.weight(1f))
                     Text(clock(o.createdAt, zone), color = Muted)
                 }
-                Text(customerLine(o) + (o.pickupAt?.let { " · pickup ${clock(it, zone)}" } ?: ""), color = Muted)
+                Text(customerLine(o, settings) + (o.pickupAt?.let { " · pickup ${clock(it, zone)}" } ?: ""), color = Muted)
                 Text(o.lines.joinToString("   ") { "${it.quantity}× ${it.code.ifEmpty { it.name }}" }, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
             Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -213,7 +230,7 @@ private fun Tag(text: String, fg: Color, bg: Color) {
     )
 }
 
-private val KIND_LABEL = mapOf("NEW" to "New ticket", "CHANGED" to "CHANGED ticket", "CANCELLED" to "CANCELLED ticket", "REPRINT" to "Reprint", "TEST" to "Test")
+private val KIND_LABEL = mapOf("NEW" to "New ticket", "CHANGED" to "CHANGED ticket", "CANCELLED" to "VOID ticket", "REPRINT" to "Reprint", "TEST" to "Test")
 private val PRINT_LABEL = mapOf("QUEUED" to "Sending…", "PRINTED" to "Printed", "FAILED" to "Did NOT print", "NO_PRINTER" to "No printer set up")
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -224,7 +241,8 @@ private fun OrderDetail(app: AppContainer, settings: SettingsEntity, v: OrderVie
     val jobs by app.orders.watchTickets(o.id).collectAsState(initial = emptyList())
     var jobId by remember(o.id) { mutableStateOf<String?>(null) }
     var notice by remember(o.id) { mutableStateOf<BannerMessage?>(null) }
-    var confirmCancel by remember { mutableStateOf(false) }
+    var voiding by remember { mutableStateOf(false) }
+    var approveVoid by remember { mutableStateOf<String?>(null) }
     val action = rememberAction()
     val staff = app.session.staff.collectAsState().value
     val closed = o.status == OrderStatus.CANCELLED || o.status == OrderStatus.PICKED_UP
@@ -246,10 +264,11 @@ private fun OrderDetail(app: AppContainer, settings: SettingsEntity, v: OrderVie
             if (o.version > 1) Tag("Changed ${o.version - 1}×", Warn, WarnSoft)
         }
         Text(
-            customerLine(o) + " · taken ${clock(o.createdAt, zone)} by ${v.createdByName}" +
+            customerLine(o, settings) + " · taken ${clock(o.createdAt, zone)} by ${v.createdByName}" +
                 (o.pickupAt?.let { " · pickup ${clock(it, zone)}" } ?: "") + (v.readyAt?.let { " · ready ${clock(it, zone)}" } ?: ""),
             color = Muted,
         )
+        o.voidReason?.let { Banner(BannerMessage(BannerKind.ERROR, "Voided: $it" + (v.voidedByName?.let { n -> " (approved by $n)" } ?: ""))) }
         notice?.let { Banner(it) }
         action.error?.let { Banner(BannerMessage(BannerKind.ERROR, it)) }
 
@@ -258,11 +277,15 @@ private fun OrderDetail(app: AppContainer, settings: SettingsEntity, v: OrderVie
                 Row {
                     Text("${line.quantity} × ", fontWeight = FontWeight.Bold)
                     if (line.code.isNotEmpty()) Text("${line.code} ", color = Red, fontWeight = FontWeight.Bold)
-                    Text(line.name, Modifier.weight(1f))
-                    Text(money(linePrice(line)))
+                    Text((if (line.open) "Open: " else "") + line.name, Modifier.weight(1f))
+                    Column(horizontalAlignment = Alignment.End) {
+                        Text(money(linePrice(line)))
+                        if (line.overrideCents != null) StruckPrice(menuUnitPrice(line) * line.quantity)
+                    }
                 }
                 val indent = Modifier.padding(start = 28.dp)
                 if (line.options.isNotEmpty()) Text(line.options.joinToString(" · ") { it.name }, indent, fontWeight = FontWeight.SemiBold)
+                line.choices.forEach { c -> Text(c.name + if (c.priceCents > 0) "  +${money(c.priceCents)}" else "", indent) }
                 line.modifiers.forEach { m -> Text(describeModifier(m.action, m.name), indent, color = premodColor(m.action), fontWeight = FontWeight.Bold) }
                 line.note?.let { Text("“$it”", indent, color = Warn) }
                 HorizontalDivider(Modifier.padding(top = 6.dp))
@@ -270,6 +293,7 @@ private fun OrderDetail(app: AppContainer, settings: SettingsEntity, v: OrderVie
         }
         o.note?.let { Text("Note: $it", color = Warn, fontWeight = FontWeight.Bold) }
         Row { Text("Subtotal"); Spacer(Modifier.weight(1f)); Text(money(o.subtotalCents)) }
+        o.discount?.let { d -> Row { Text("Discount ${describeDiscount(d)}"); Spacer(Modifier.weight(1f)); Text("-" + money(o.discountCents)) } }
         Row { Text("Tax"); Spacer(Modifier.weight(1f)); Text(money(o.taxCents)) }
         Row {
             Text("Total", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge)
@@ -291,7 +315,15 @@ private fun OrderDetail(app: AppContainer, settings: SettingsEntity, v: OrderVie
             }
             OutlinedButton(onClick = { action.run { printed(app.orders.reprint(o.id), "Reprint:") } }, enabled = !action.busy) { Text("Reprint ticket") }
             if (!closed && staff?.can(Permission.ORDER) == true) {
-                OutlinedButton(onClick = { confirmCancel = true }, enabled = !action.busy) { Text("Cancel order", color = Red) }
+                OutlinedButton(onClick = { voiding = true }, enabled = !action.busy) { Text("Void order", color = Red) }
+            }
+        }
+
+        if (v.approvals.isNotEmpty()) {
+            Text("Approvals", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp))
+            v.approvals.forEach { a ->
+                val by = if (a.byName == a.forName) a.byName else "${a.byName} for ${a.forName}"
+                Text("${clock(Instant.ofEpochMilli(a.at), zone)}  ${a.what} ($by)", color = Muted)
             }
         }
 
@@ -319,15 +351,51 @@ private fun OrderDetail(app: AppContainer, settings: SettingsEntity, v: OrderVie
         job?.let { TicketPreview(AppJson.decodeFromString<List<TicketLine>>(it.ticketJson)) }
     }
 
-    if (confirmCancel) {
-        AlertDialog(
-            onDismissRequest = { confirmCancel = false },
-            title = { Text("Cancel order #${o.number}?") },
-            text = { Text("A CANCELLED ticket will print so the kitchen stops cooking it.") },
-            confirmButton = {
-                Button(onClick = { confirmCancel = false; action.run { printed(app.orders.cancel(o.id).second, "Order cancelled.") } }) { Text("Cancel order") }
+    fun void(reason: String, managerId: String?) {
+        action.run { printed(app.orders.cancel(o.id, reason, managerId).second, "Order voided.") }
+    }
+
+    if (voiding) {
+        VoidDialog(
+            number = o.number,
+            reasons = settings.voidReasons,
+            onVoid = { reason ->
+                voiding = false
+                if (staff?.can(Permission.VOID) == true) void(reason, null) else approveVoid = reason
             },
-            dismissButton = { TextButton(onClick = { confirmCancel = false }) { Text("Keep it") } },
+            onDismiss = { voiding = false },
         )
     }
+    approveVoid?.let { reason ->
+        ApprovalDialog(
+            app, Permission.VOID, "Void order #${o.number}: $reason",
+            onApproved = { manager -> approveVoid = null; void(reason, manager.id) },
+            onDismiss = { approveVoid = null },
+        )
+    }
+}
+
+/** Void asks why (backlog E5): one of the restaurant's reasons, or typed under Other. */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun VoidDialog(number: Int, reasons: List<String>, onVoid: (String) -> Unit, onDismiss: () -> Unit) {
+    var picked by remember { mutableStateOf<String?>(null) }
+    var other by remember { mutableStateOf("") }
+    val reason = if (picked == null) other.trim() else picked!!
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Void order #$number?") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text("A VOID ticket prints so the kitchen stops cooking it. The order stays in history.")
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    reasons.forEach { r -> FilterChip(selected = picked == r, onClick = { picked = r }, label = { Text(r) }) }
+                    FilterChip(selected = picked == null, onClick = { picked = null }, label = { Text("Other") })
+                }
+                if (picked == null) OutlinedTextField(other, { other = it.take(80) }, singleLine = true, label = { Text("Reason") })
+            }
+        },
+        confirmButton = { Button(enabled = reason.isNotEmpty(), onClick = { onVoid(reason) }) { Text("Void order") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("Keep it") } },
+    )
 }
