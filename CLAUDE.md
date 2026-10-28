@@ -7,9 +7,16 @@ The problem: the cashier shouts orders to the kitchen and chefs must remember th
 down when it gets busy. The cashier enters orders on a tablet instead, and a kitchen ticket
 prints so chefs can see which orders are open and which are done.
 
-The requirements and roadmap doc is the source of truth for scope and decisions:
-https://claude.ai/code/artifact/d01dc4d9-07c8-490b-a427-590b9b187b53
-`docs/requirements.md` is an older snapshot from before the cloud decision.
+## Docs (read these before planning or building a feature)
+
+- `docs/roadmap.md` – requirements, platform decisions, roadmap phases, open questions. Source of
+  truth for scope.
+- `docs/backlog.md` – user stories (IDs like A1, B3, C1) with acceptance criteria, test cases and a
+  Status column. Work stories in priority order (P0 first). When you start or finish a story,
+  update its Status in the tracker table and tick its test cases. Put the story ID in branch
+  names and commit messages.
+- `docs/api-plan.md` – the future backend's endpoints and server-side rules.
+- `docs/requirements.md` – older snapshot from before the cloud decision; ignore where it differs.
 
 ## Decisions
 
@@ -44,7 +51,8 @@ Kotlin · Jetpack Compose · Room (SQLite) · coroutines · Gradle (Kotlin DSL, 
 Status: version 1 is feature-complete and ready for the restaurant test. Screens: Setup, PIN
 sign-in, New order (dish sheet with modifications), Orders (detail, reprint, change → CHANGED,
 cancel), Menu + Modifier lists editing, Staff, Settings (printer test ticket, export).
-Not built yet: kitchen screen (needs a second device), payments.
+Not built yet: kitchen screen (needs a second device), payments. Next: the open stories in
+`docs/backlog.md`, P0 first.
 - Storage: Room; the menu is one JSON document (`MenuEntity`), orders keep JSON snapshots of
   their lines, every ticket is a `print_jobs` row saved before it is sent.
 - Printing runs in `AppContainer.appScope` so a ticket still goes out if the screen closes.
