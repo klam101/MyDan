@@ -1,0 +1,2715 @@
+{
+ "sections": [
+  {
+   "name": "Lunch Special",
+   "note": "Mon–Sat 11:00 am–3:30 pm. Served with vegetable fried rice and egg roll.",
+   "sizes": [],
+   "rows": [
+    {
+     "code": "L1",
+     "altName": "叉或雞炒麵",
+     "name": "Roast Pork or Chicken Chow Mein",
+     "prices": [
+      6.05
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [
+      "Roast Pork",
+      "Chicken"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "L2",
+     "altName": "叉或雞撈麵",
+     "name": "Roast Pork or Chicken Lo Mein",
+     "prices": [
+      6.05
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [
+      "Roast Pork",
+      "Chicken"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "L3",
+     "altName": "叉或雞芥蘭",
+     "name": "Roast Pork or Chicken w. Broccoli",
+     "prices": [
+      6.05
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [
+      "Roast Pork",
+      "Chicken"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "L4",
+     "altName": "腰果雞",
+     "name": "Chicken w. Cashew Nuts",
+     "prices": [
+      6.05
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L5",
+     "altName": "魚香雞",
+     "name": "Chicken w. Garlic Sauce",
+     "prices": [
+      6.35
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L6",
+     "altName": "左宗雞",
+     "name": "General Tso's Chicken",
+     "prices": [
+      6.35
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L7",
+     "altName": "芝麻雞",
+     "name": "Sesame Chicken",
+     "prices": [
+      6.35
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L8",
+     "altName": "甜酸肉或雞",
+     "name": "Sweet & Sour Pork or Chicken",
+     "prices": [
+      6.05
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [
+      "Pork",
+      "Chicken"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "L9",
+     "altName": "蘑菇雞片",
+     "name": "Moo Goo Gai Pan",
+     "prices": [
+      6.05
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L10",
+     "altName": "四川雞",
+     "name": "Szechuan Chicken",
+     "prices": [
+      6.35
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L11",
+     "altName": "宮保雞",
+     "name": "Kung Po Chicken and Peanuts",
+     "prices": [
+      6.35
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L12",
+     "altName": "湖南雞",
+     "name": "Hunan Chicken",
+     "prices": [
+      6.35
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L13",
+     "altName": "叉或雞蓉蛋",
+     "name": "Roast Pork or Chicken Egg Foo Young",
+     "prices": [
+      6.05
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [
+      "Roast Pork",
+      "Chicken"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "L14",
+     "altName": "什菜牛或雞",
+     "name": "Beef or Chicken w. Mixed Vegetables",
+     "prices": [
+      6.35
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [
+      "Beef",
+      "Chicken"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "L15",
+     "altName": "咖喱雞或牛",
+     "name": "Curry Chicken or Beef",
+     "prices": [
+      6.35
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [
+      "Chicken",
+      "Beef"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "L16",
+     "altName": "無骨排",
+     "name": "Boneless Ribs",
+     "prices": [
+      7.05
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L17",
+     "altName": "芥蘭牛",
+     "name": "Beef w. Broccoli",
+     "prices": [
+      6.35
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L18",
+     "altName": "青椒牛",
+     "name": "Pepper Steak w. Onions",
+     "prices": [
+      6.35
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L19",
+     "altName": "魚香牛",
+     "name": "Beef w. Garlic Sauce",
+     "prices": [
+      6.35
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L20",
+     "altName": "蝦或牛炒麵",
+     "name": "Shrimp or Beef Chow Mein",
+     "prices": [
+      6.35
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [
+      "Shrimp",
+      "Beef"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "L21",
+     "altName": "蝦或牛撈麵",
+     "name": "Shrimp or Beef Lo Mein",
+     "prices": [
+      6.35
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [
+      "Shrimp",
+      "Beef"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "L22",
+     "altName": "芥蘭蝦",
+     "name": "Shrimp w. Broccoli",
+     "prices": [
+      6.7
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L23",
+     "altName": "腰果蝦",
+     "name": "Shrimp w. Cashew Nuts",
+     "prices": [
+      6.7
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L24",
+     "altName": "四川蝦",
+     "name": "Szechuan Shrimp",
+     "prices": [
+      6.7
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L25",
+     "altName": "宮保蝦",
+     "name": "Kung Po Shrimp and Peanuts",
+     "prices": [
+      6.7
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L26",
+     "altName": "蝦龍糊",
+     "name": "Shrimp w. Lobster Sauce",
+     "prices": [
+      6.7
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L27",
+     "altName": "干燒蝦",
+     "name": "Hot & Spicy Shrimp",
+     "prices": [
+      6.7
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L28",
+     "altName": "魚香蝦",
+     "name": "Shrimp w. Garlic Sauce",
+     "prices": [
+      6.7
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L29",
+     "altName": "魚香芥蘭",
+     "name": "Broccoli w. Garlic Sauce",
+     "prices": [
+      6.05
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "L30",
+     "altName": "素什菜",
+     "name": "Mixed Vegetables",
+     "prices": [
+      6.05
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "American Selections",
+   "note": null,
+   "sizes": [
+    "Plain",
+    "w. Fries or Fried Rice",
+    "w. Chicken or Pork Fried Rice",
+    "w. Shrimp or Beef Fried Rice"
+   ],
+   "rows": [
+    {
+     "code": "A1",
+     "altName": "炸雞翼",
+     "name": "Fried Chicken Wings (4 pcs)",
+     "prices": [
+      5.3,
+      6.6,
+      6.9,
+      7.4
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "A2",
+     "altName": "蜂蜜芥末雞翼",
+     "name": "Honey Mustard Wing",
+     "prices": [
+      5.8,
+      7.1,
+      7.4,
+      7.9
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "A3",
+     "altName": "炸海鮮大會",
+     "name": "Fried Seafood Combination",
+     "prices": [
+      5.8,
+      7.1,
+      7.4,
+      7.9
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "A4",
+     "altName": "蜜汁雞翼",
+     "name": "Chop Chicken Wings in Honey Sauce",
+     "prices": [
+      5.8,
+      7.1,
+      7.4,
+      7.9
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "A5",
+     "altName": "炸排骨尾",
+     "name": "Fried Spare Rib Tips",
+     "prices": [
+      5.6,
+      8.3,
+      6.9,
+      7.2,
+      7.7
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": [
+      "Plain Pt",
+      "Plain Qt",
+      "w. Fries or Fried Rice",
+      "w. Chicken or Pork Fried Rice",
+      "w. Shrimp or Beef Fried Rice"
+     ]
+    },
+    {
+     "code": "A6",
+     "altName": "雞金手指",
+     "name": "Chicken Fingers",
+     "prices": [
+      5.15,
+      6,
+      6.35,
+      6.85
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "A7",
+     "altName": "炸小蝦",
+     "name": "Fried Shrimps (12 pcs)",
+     "prices": [
+      5.6,
+      6.9,
+      7.2,
+      7.7
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "A8",
+     "altName": "辣雞翅",
+     "name": "Hot Wing",
+     "prices": [
+      5.8,
+      7.1,
+      7.4,
+      7.9
+     ],
+     "sized": true,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "A9",
+     "altName": "炸干貝",
+     "name": "Fried Scallops (10 pcs)",
+     "prices": [
+      5.4,
+      6.1,
+      6.6,
+      7.1
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "A10",
+     "altName": "雞串",
+     "name": "Chicken on Stick",
+     "prices": [
+      5.6,
+      6.9,
+      7.2,
+      7.7
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "A12",
+     "altName": "炸蟹條",
+     "name": "Fried Crab Meat Sticks (4 pcs)",
+     "prices": [
+      5.4,
+      6.1,
+      6.6,
+      7.1
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "Appetizers",
+   "note": null,
+   "sizes": [],
+   "rows": [
+    {
+     "code": "1",
+     "altName": "春卷",
+     "name": "Pork Egg Roll",
+     "prices": [
+      1.4
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "2",
+     "altName": "蝦春卷",
+     "name": "Shrimp Egg Roll",
+     "prices": [
+      1.5
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "3",
+     "altName": "蟹角",
+     "name": "Crab Rangoon (10)",
+     "prices": [
+      5.45
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "4",
+     "altName": "上海卷",
+     "name": "Spring Roll",
+     "prices": [
+      1.5
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "5",
+     "altName": "鍋貼或水餃",
+     "name": "Dumplings (8)",
+     "prices": [
+      5.75
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [
+      "Fried",
+      "Steamed"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "6",
+     "altName": "炸雲吞",
+     "name": "Fried Wontons (12) w. Sweet & Sour Sauce",
+     "prices": [
+      3.9
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "7",
+     "altName": "炸薯條",
+     "name": "French Fries",
+     "prices": [
+      3.1
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "8",
+     "altName": "無骨排",
+     "name": "Boneless Spare Ribs",
+     "prices": [
+      6.8,
+      10.1
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": [
+      "S",
+      "L"
+     ]
+    },
+    {
+     "code": "9",
+     "altName": "炸包",
+     "name": "Donuts",
+     "prices": [
+      4
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "Soup",
+   "note": "With dry noodles.",
+   "sizes": [
+    "Pt",
+    "Qt"
+   ],
+   "rows": [
+    {
+     "code": "10",
+     "altName": "雲吞湯",
+     "name": "Wonton Soup",
+     "prices": [
+      2.85,
+      4
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "11",
+     "altName": "蛋花湯",
+     "name": "Egg Drop Soup",
+     "prices": [
+      2.7,
+      3.7
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "12",
+     "altName": "蛋花雲吞湯",
+     "name": "Wonton Egg Drop Mix Soup",
+     "prices": [
+      3.05,
+      4.7
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "13",
+     "altName": "雞麵或飯湯",
+     "name": "Chicken Noodle or Rice Soup",
+     "prices": [
+      3.05,
+      4.7
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [
+      "Noodle",
+      "Rice"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "14",
+     "altName": "素菜湯",
+     "name": "Vegetable Soup",
+     "prices": [
+      3.05,
+      4.7
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "15",
+     "altName": "酸辣湯",
+     "name": "Hot & Sour Soup",
+     "prices": [
+      3.65,
+      5.4
+     ],
+     "sized": true,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "16",
+     "altName": "海鮮豆腐湯",
+     "name": "Seafood w. Bean Curd Soup",
+     "prices": [
+      7.3
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "17",
+     "altName": "叉或雞麵湯",
+     "name": "Roast Pork or Chicken Yat Gaw Mein",
+     "prices": [
+      5.7
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [
+      "Roast Pork",
+      "Chicken"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "18",
+     "altName": "本樓雲吞湯",
+     "name": "House Special Wonton Soup",
+     "prices": [
+      5.2,
+      7.2
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "Fried Rice",
+   "note": null,
+   "sizes": [
+    "Pt",
+    "Qt"
+   ],
+   "rows": [
+    {
+     "code": "19",
+     "altName": "雞或叉炒飯",
+     "name": "Chicken or Roast Pork Fried Rice",
+     "prices": [
+      4.95,
+      7.6
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [
+      "Chicken",
+      "Roast Pork"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "20",
+     "altName": "蝦或牛炒飯",
+     "name": "Shrimp or Beef Fried Rice",
+     "prices": [
+      5.3,
+      8.1
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [
+      "Shrimp",
+      "Beef"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "21",
+     "altName": "素菜炒飯",
+     "name": "Vegetable Fried Rice",
+     "prices": [
+      4.95,
+      7.6
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "22",
+     "altName": "揚州炒飯",
+     "name": "Young Chow Fried Rice",
+     "prices": [
+      5.8,
+      8.3
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "23",
+     "altName": "本樓炒飯",
+     "name": "House Special Fried Rice",
+     "prices": [
+      5.7,
+      8.3
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "Lo Mein",
+   "note": "Soft noodles.",
+   "sizes": [
+    "Pt",
+    "Qt"
+   ],
+   "rows": [
+    {
+     "code": "24",
+     "altName": "雞或叉撈麵",
+     "name": "Chicken or Roast Pork Lo Mein",
+     "prices": [
+      5.65,
+      7.8
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [
+      "Chicken",
+      "Roast Pork"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "25",
+     "altName": "牛或蝦撈麵",
+     "name": "Beef or Shrimp Lo Mein",
+     "prices": [
+      6.05,
+      8.6
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [
+      "Beef",
+      "Shrimp"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "26",
+     "altName": "素菜撈麵",
+     "name": "Vegetable Lo Mein",
+     "prices": [
+      5.65,
+      7.8
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "27",
+     "altName": "本樓撈麵",
+     "name": "House Special Lo Mein",
+     "prices": [
+      6.3,
+      8.8
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "Chow Mein",
+   "note": "With white rice and dry noodles.",
+   "sizes": [
+    "Pt",
+    "Qt"
+   ],
+   "rows": [
+    {
+     "code": "28",
+     "altName": "雞或叉炒麵",
+     "name": "Chicken or Roast Pork Chow Mein",
+     "prices": [
+      5.1,
+      7.4
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [
+      "Chicken",
+      "Roast Pork"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "29",
+     "altName": "蝦或牛炒麵",
+     "name": "Shrimp or Beef Chow Mein",
+     "prices": [
+      5.3,
+      8.1
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [
+      "Shrimp",
+      "Beef"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "30",
+     "altName": "素菜炒麵",
+     "name": "Mixed Vegetables Chow Mein",
+     "prices": [
+      5.1,
+      7.4
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "31",
+     "altName": "本樓炒麵",
+     "name": "House Special Chow Mein",
+     "prices": [
+      5.8,
+      8.8
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "Chicken",
+   "note": "With white rice.",
+   "sizes": [
+    "Pt",
+    "Qt"
+   ],
+   "rows": [
+    {
+     "code": "32",
+     "altName": "腰果雞",
+     "name": "Chicken w. Cashew Nuts",
+     "prices": [
+      5.85,
+      8.65
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "33",
+     "altName": "芥蘭雞",
+     "name": "Chicken w. Broccoli",
+     "prices": [
+      5.85,
+      8.65
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "34",
+     "altName": "雪豆雞",
+     "name": "Chicken w. Snow Peas",
+     "prices": [
+      5.85,
+      8.65
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "35",
+     "altName": "什錦雞",
+     "name": "Chicken w. Mixed Vegetables",
+     "prices": [
+      5.85,
+      8.65
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "36",
+     "altName": "咖喱雞",
+     "name": "Curry Chicken",
+     "prices": [
+      5.85,
+      8.65
+     ],
+     "sized": true,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "37",
+     "altName": "豆腐雞",
+     "name": "Chicken w. Bean Curd",
+     "prices": [
+      5.85,
+      8.65
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "38",
+     "altName": "蘑菇雞",
+     "name": "Chicken w. Mushrooms",
+     "prices": [
+      5.85,
+      8.65
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "39",
+     "altName": "玉米雞",
+     "name": "Chicken w. Baby Corn",
+     "prices": [
+      5.85,
+      8.65
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "40",
+     "altName": "青椒雞",
+     "name": "Chicken w. Pepper & Onion",
+     "prices": [
+      5.85,
+      8.65
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "41",
+     "altName": "蘑菇雞片",
+     "name": "Moo Goo Gai Pan",
+     "prices": [
+      5.85,
+      8.65
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "Beef",
+   "note": "With white rice.",
+   "sizes": [
+    "Pt",
+    "Qt"
+   ],
+   "rows": [
+    {
+     "code": "42",
+     "altName": "什錦牛",
+     "name": "Beef w. Mixed Vegetables",
+     "prices": [
+      6.2,
+      9.2
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "43",
+     "altName": "芥蘭牛",
+     "name": "Beef w. Broccoli",
+     "prices": [
+      6.2,
+      9.2
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "44",
+     "altName": "青椒牛",
+     "name": "Pepper Steak w. Onion",
+     "prices": [
+      6.2,
+      9.2
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "45",
+     "altName": "雪豆牛",
+     "name": "Beef w. Snow Peas",
+     "prices": [
+      6.2,
+      9.2
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "46",
+     "altName": "蠔油牛",
+     "name": "Beef w. Oyster Sauce",
+     "prices": [
+      6.2,
+      9.2
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "47",
+     "altName": "豆腐牛",
+     "name": "Beef w. Bean Curd",
+     "prices": [
+      6.2,
+      9.2
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "48",
+     "altName": "蘑菇牛",
+     "name": "Beef w. Mushrooms",
+     "prices": [
+      6.2,
+      9.2
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "49",
+     "altName": "咖喱牛",
+     "name": "Curry Beef w. Onion",
+     "prices": [
+      6.2,
+      9.2
+     ],
+     "sized": true,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "Seafood",
+   "note": "With white rice.",
+   "sizes": [
+    "Pt",
+    "Qt"
+   ],
+   "rows": [
+    {
+     "code": "50",
+     "altName": "腰果蝦",
+     "name": "Shrimp w. Cashew Nuts",
+     "prices": [
+      6.55,
+      10.45
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "51",
+     "altName": "什錦蝦",
+     "name": "Shrimp w. Mixed Vegetables",
+     "prices": [
+      6.55,
+      10.45
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "52",
+     "altName": "芥蘭蝦",
+     "name": "Shrimp w. Broccoli",
+     "prices": [
+      6.55,
+      10.45
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "53",
+     "altName": "雪豆蝦",
+     "name": "Shrimp w. Snow Peas",
+     "prices": [
+      6.55,
+      10.45
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "54",
+     "altName": "咖喱蝦",
+     "name": "Curry Shrimp w. Onion",
+     "prices": [
+      6.55,
+      10.45
+     ],
+     "sized": true,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "55",
+     "altName": "蝦龍糊",
+     "name": "Shrimp w. Lobster Sauce",
+     "prices": [
+      6.55,
+      10.45
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "56",
+     "altName": "蘑菇蝦",
+     "name": "Shrimp w. Mushrooms",
+     "prices": [
+      6.55,
+      10.45
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "57",
+     "altName": "蠔油蝦",
+     "name": "Shrimp w. Oyster Sauce",
+     "prices": [
+      6.55,
+      10.45
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "58",
+     "altName": "玉米蝦",
+     "name": "Shrimp w. Baby Corn",
+     "prices": [
+      6.55,
+      10.45
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "59",
+     "altName": "豆腐蝦",
+     "name": "Shrimp w. Bean Curd",
+     "prices": [
+      6.55,
+      10.45
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "Pork",
+   "note": "With white rice.",
+   "sizes": [
+    "Pt",
+    "Qt"
+   ],
+   "rows": [
+    {
+     "code": "60",
+     "altName": "什錦叉燒",
+     "name": "Roast Pork w. Mixed Vegetables",
+     "prices": [
+      5.6,
+      8.35
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "61",
+     "altName": "芥蘭叉燒",
+     "name": "Roast Pork w. Broccoli",
+     "prices": [
+      5.6,
+      8.35
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "62",
+     "altName": "腰果叉燒",
+     "name": "Roast Pork w. Cashew Nuts",
+     "prices": [
+      5.6,
+      8.35
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "63",
+     "altName": "雪豆叉燒",
+     "name": "Roast Pork w. Snow Peas",
+     "prices": [
+      5.6,
+      8.35
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "64",
+     "altName": "蘑菇叉燒",
+     "name": "Roast Pork w. Mushrooms",
+     "prices": [
+      5.6,
+      8.35
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "65",
+     "altName": "蠔油叉燒",
+     "name": "Roast Pork w. Oyster Sauce",
+     "prices": [
+      5.6,
+      8.35
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "66",
+     "altName": "玉米叉燒",
+     "name": "Roast Pork w. Baby Corn",
+     "prices": [
+      5.6,
+      8.35
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "Chop Suey",
+   "note": "With white rice.",
+   "sizes": [
+    "Pt",
+    "Qt"
+   ],
+   "rows": [
+    {
+     "code": "67",
+     "altName": "雞或叉什碎",
+     "name": "Chicken or Roast Pork Chop Suey",
+     "prices": [
+      5.4,
+      7.8
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [
+      "Chicken",
+      "Roast Pork"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "68",
+     "altName": "蝦或牛什碎",
+     "name": "Shrimp or Beef Chop Suey",
+     "prices": [
+      5.55,
+      8.3
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [
+      "Shrimp",
+      "Beef"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "69",
+     "altName": "素菜什碎",
+     "name": "Vegetable Chop Suey",
+     "prices": [
+      5.4,
+      7.8
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "70",
+     "altName": "本樓什碎",
+     "name": "House Special Chop Suey",
+     "prices": [
+      5.8,
+      8.8
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "Sweet & Sour",
+   "note": "With white rice.",
+   "sizes": [
+    "Pt",
+    "Qt"
+   ],
+   "rows": [
+    {
+     "code": "71",
+     "altName": "甜酸肉",
+     "name": "Sweet & Sour Pork",
+     "prices": [
+      5.85,
+      8.65
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "72",
+     "altName": "甜酸雞",
+     "name": "Sweet & Sour Chicken",
+     "prices": [
+      5.85,
+      8.65
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "Chow Mei Fun",
+   "note": null,
+   "sizes": [],
+   "rows": [
+    {
+     "code": "73",
+     "altName": "叉或雞炒米",
+     "name": "Roast Pork or Chicken Chow Mei Fun",
+     "prices": [
+      7.55
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [
+      "Roast Pork",
+      "Chicken"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "74",
+     "altName": "蝦或牛炒米",
+     "name": "Shrimp or Beef Chow Mei Fun",
+     "prices": [
+      7.75
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [
+      "Shrimp",
+      "Beef"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "75",
+     "altName": "素菜炒米",
+     "name": "Vegetable Chow Mei Fun",
+     "prices": [
+      7.55
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "76",
+     "altName": "星州炒米",
+     "name": "Singapore Chow Mei Fun",
+     "prices": [
+      7.75
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "77",
+     "altName": "本樓炒米",
+     "name": "House Special Chow Mei Fun",
+     "prices": [
+      7.75
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "Egg Foo Young",
+   "note": "With white rice. 3 pancakes per order.",
+   "sizes": [],
+   "rows": [
+    {
+     "code": "78",
+     "altName": "什錦蓉蛋",
+     "name": "Mixed Vegetables Egg Foo Young",
+     "prices": [
+      7.3
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "79",
+     "altName": "叉燒蓉蛋",
+     "name": "Roast Pork Egg Foo Young",
+     "prices": [
+      7.3
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "80",
+     "altName": "雞蓉蛋",
+     "name": "Chicken Egg Foo Young",
+     "prices": [
+      7.3
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "81",
+     "altName": "牛蓉蛋",
+     "name": "Beef Egg Foo Young",
+     "prices": [
+      7.75
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "82",
+     "altName": "蝦蓉蛋",
+     "name": "Shrimp Egg Foo Young",
+     "prices": [
+      7.75
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "83",
+     "altName": "本樓蓉蛋",
+     "name": "House Special Egg Foo Young",
+     "prices": [
+      8.5
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "Vegetable",
+   "note": "With white rice.",
+   "sizes": [],
+   "rows": [
+    {
+     "code": "84",
+     "altName": "魚香芥蘭",
+     "name": "Broccoli w. Garlic Sauce",
+     "prices": [
+      7.75
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "85",
+     "altName": "魚香炸豆腐",
+     "name": "Fried Bean Curd w. Garlic Sauce",
+     "prices": [
+      7.75
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "86",
+     "altName": "素什錦",
+     "name": "Mixed Vegetables",
+     "prices": [
+      7.75
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "87",
+     "altName": "清炒芥蘭",
+     "name": "Broccoli w. Brown Sauce",
+     "prices": [
+      7.75
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "88",
+     "altName": "四川豆腐",
+     "name": "Bean Curd, Szechuan Style",
+     "prices": [
+      7.75
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "89",
+     "altName": "家常豆腐",
+     "name": "Bean Curd Home Style",
+     "prices": [
+      7.75
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "Combination Plates",
+   "note": "Served with vegetable fried rice and egg roll.",
+   "sizes": [],
+   "rows": [
+    {
+     "code": "C1",
+     "altName": "雞炒麵",
+     "name": "Chicken Chow Mein",
+     "prices": [
+      7.65
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "C2",
+     "altName": "魚香雞",
+     "name": "Chicken w. Garlic Sauce",
+     "prices": [
+      8.2
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "C3",
+     "altName": "芥蘭肉或雞",
+     "name": "Pork or Chicken w. Broccoli",
+     "prices": [
+      7.65
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [
+      "Pork",
+      "Chicken"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "C4",
+     "altName": "左宗雞",
+     "name": "General Tso's Chicken",
+     "prices": [
+      8.4
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "C5",
+     "altName": "芝麻雞",
+     "name": "Sesame Chicken",
+     "prices": [
+      8.4
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "C6",
+     "altName": "四川雞",
+     "name": "Szechuan Chicken",
+     "prices": [
+      8.2
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "C7",
+     "altName": "甜酸雞或肉",
+     "name": "Sweet & Sour Chicken or Pork",
+     "prices": [
+      7.65
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [
+      "Chicken",
+      "Pork"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "C8",
+     "altName": "肉或雞撈麵",
+     "name": "Pork or Chicken Lo Mein",
+     "prices": [
+      7.65
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [
+      "Pork",
+      "Chicken"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "C9",
+     "altName": "湖南雞",
+     "name": "Hunan Chicken",
+     "prices": [
+      8.2
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "C10",
+     "altName": "腰果雞",
+     "name": "Chicken w. Cashew Nuts",
+     "prices": [
+      7.65
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "C11",
+     "altName": "無骨排",
+     "name": "Boneless Spare Ribs",
+     "prices": [
+      8.4
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "C12",
+     "altName": "干燒蝦",
+     "name": "Hot & Spicy Shrimp",
+     "prices": [
+      8.4
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "C13",
+     "altName": "蝦龍糊",
+     "name": "Shrimp w. Lobster Sauce",
+     "prices": [
+      8.4
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "C14",
+     "altName": "芥蘭蝦或牛",
+     "name": "Shrimp or Beef w. Broccoli",
+     "prices": [
+      8.4
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [
+      "Shrimp",
+      "Beef"
+     ],
+     "sizes": null
+    },
+    {
+     "code": "C15",
+     "altName": "青椒牛",
+     "name": "Pepper Steak w. Onion",
+     "prices": [
+      8.4
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "C16",
+     "altName": "四川牛",
+     "name": "Szechuan Beef",
+     "prices": [
+      8.2
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "C17",
+     "altName": "干燒牛",
+     "name": "Hot & Spicy Beef",
+     "prices": [
+      8.2
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "C18",
+     "altName": "蘑菇雞片",
+     "name": "Moo Goo Gai Pan",
+     "prices": [
+      7.65
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "C19",
+     "altName": "叉或雞蓉蛋",
+     "name": "Pork or Chicken Egg Foo Young",
+     "prices": [
+      7.65
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [
+      "Pork",
+      "Chicken"
+     ],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "Diet Dishes",
+   "note": "Steamed, with white rice.",
+   "sizes": [
+    "Pt",
+    "Qt"
+   ],
+   "rows": [
+    {
+     "code": "D1",
+     "altName": "蒸什菜",
+     "name": "Steamed Mixed Vegetables",
+     "prices": [
+      5.3,
+      7.75
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "D2",
+     "altName": "蒸什菜雞",
+     "name": "Steamed Chicken w. Mixed Vegetables",
+     "prices": [
+      5.75,
+      8.55
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "D3",
+     "altName": "蒸芥蘭雞",
+     "name": "Steamed Chicken w. Broccoli",
+     "prices": [
+      5.75,
+      8.55
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "D4",
+     "altName": "蒸芥蘭蝦",
+     "name": "Steamed Shrimp w. Broccoli",
+     "prices": [
+      6.4,
+      10.45
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "House Special",
+   "note": "With white rice.",
+   "sizes": [],
+   "rows": [
+    {
+     "code": "H1",
+     "altName": "四川雞",
+     "name": "Szechuan Chicken",
+     "prices": [
+      9.55
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H2",
+     "altName": "魚香雞",
+     "name": "Chicken w. Garlic Sauce",
+     "prices": [
+      9.55
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H3",
+     "altName": "宮保雞",
+     "name": "Kung Pao Chicken",
+     "prices": [
+      9.55
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H4",
+     "altName": "芝麻雞",
+     "name": "Sesame Chicken",
+     "prices": [
+      10.1
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H5",
+     "altName": "左宗雞",
+     "name": "General Tso's Chicken",
+     "prices": [
+      10.1
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H6",
+     "altName": "泰國雞",
+     "name": "Panang Chicken",
+     "prices": [
+      10.1
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H7",
+     "altName": "陳皮雞",
+     "name": "Orange Flavored Chicken",
+     "prices": [
+      10.1
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H8",
+     "altName": "檸檬雞",
+     "name": "Lemon Chicken",
+     "prices": [
+      9.1
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H9",
+     "altName": "湖南雞",
+     "name": "Hunan Chicken",
+     "prices": [
+      9.55
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H10",
+     "altName": "菠蘿雞",
+     "name": "Pineapple Chicken",
+     "prices": [
+      9.55
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H11",
+     "altName": "干燒牛肉絲",
+     "name": "Hot & Spicy Shredded Beef",
+     "prices": [
+      10.1
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H12",
+     "altName": "龍鳳配",
+     "name": "Dragon & Phoenix",
+     "prices": [
+      10.6
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H13",
+     "altName": "四川牛",
+     "name": "Szechuan Beef",
+     "prices": [
+      10.1
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H14",
+     "altName": "蒙古牛",
+     "name": "Mongolian Beef",
+     "prices": [
+      10.35
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H15",
+     "altName": "湖南牛",
+     "name": "Hunan Beef",
+     "prices": [
+      10.1
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H16",
+     "altName": "魚香牛",
+     "name": "Beef w. Garlic Sauce",
+     "prices": [
+      10.1
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H17",
+     "altName": "魚香兩樣",
+     "name": "Double Delight w. Garlic Sauce",
+     "prices": [
+      10.2
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H18",
+     "altName": "魚香干貝",
+     "name": "Scallop w. Garlic Sauce",
+     "prices": [
+      11.6
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H19",
+     "altName": "炒三樣",
+     "name": "Triple Delight",
+     "prices": [
+      10
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H20",
+     "altName": "海鮮大會",
+     "name": "Seafood Delight",
+     "prices": [
+      12.65
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H21",
+     "altName": "全家福",
+     "name": "Happy Family",
+     "prices": [
+      12.65
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H22",
+     "altName": "炒四季",
+     "name": "Four Seasons",
+     "prices": [
+      10.7
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H23",
+     "altName": "魚香蝦",
+     "name": "Shrimp w. Garlic Sauce",
+     "prices": [
+      11.85
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H24",
+     "altName": "干燒蝦",
+     "name": "Hot & Spicy Shrimp",
+     "prices": [
+      11.1
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H25",
+     "altName": "魚香雙鮮",
+     "name": "Shrimp & Scallops w. Garlic Sauce",
+     "prices": [
+      11.85
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H26",
+     "altName": "湖南蝦",
+     "name": "Hunan Shrimp",
+     "prices": [
+      11.85
+     ],
+     "sized": false,
+     "spicy": true,
+     "choices": [],
+     "sizes": null
+    },
+    {
+     "code": "H27",
+     "altName": "爆雙丁",
+     "name": "Chicken & Shrimp",
+     "prices": [
+      9.1
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  },
+  {
+   "name": "Side Orders",
+   "note": null,
+   "sizes": [],
+   "rows": [
+    {
+     "code": "",
+     "altName": "白飯",
+     "name": "White Rice",
+     "prices": [
+      2.75,
+      3.75
+     ],
+     "sized": true,
+     "spicy": false,
+     "choices": [],
+     "sizes": [
+      "Pt",
+      "Qt"
+     ]
+    },
+    {
+     "code": "",
+     "altName": "麵干",
+     "name": "Dry Noodles",
+     "prices": [
+      0.75
+     ],
+     "sized": false,
+     "spicy": false,
+     "choices": [],
+     "sizes": null
+    }
+   ]
+  }
+ ],
+ "modifierLists": [
+  {
+   "name": "Vegetables",
+   "actions": [
+    "no",
+    "extra",
+    "add"
+   ],
+   "modifiers": [
+    {
+     "name": "Onion",
+     "altName": "洋蔥",
+     "price": 1
+    },
+    {
+     "name": "Scallion",
+     "altName": "蔥",
+     "price": 0.5
+    },
+    {
+     "name": "Broccoli",
+     "altName": "芥蘭",
+     "price": 1
+    },
+    {
+     "name": "Carrot",
+     "altName": "紅蘿蔔",
+     "price": 0.5
+    },
+    {
+     "name": "Pea Pods",
+     "altName": "雪豆",
+     "price": 1
+    },
+    {
+     "name": "Mushroom",
+     "altName": "蘑菇",
+     "price": 1
+    },
+    {
+     "name": "Bean Sprouts",
+     "altName": "芽菜",
+     "price": 0.5
+    },
+    {
+     "name": "Peppers",
+     "altName": "青椒",
+     "price": 1
+    }
+   ],
+   "categories": [
+    "Lunch Special",
+    "Chicken",
+    "Beef",
+    "Seafood",
+    "Pork",
+    "Vegetable",
+    "Diet Dishes",
+    "House Special",
+    "Lo Mein",
+    "Chow Mein",
+    "Fried Rice"
+   ]
+  },
+  {
+   "name": "Sauce & spice",
+   "actions": [
+    "no",
+    "light",
+    "extra",
+    "side"
+   ],
+   "modifiers": [
+    {
+     "name": "Sauce",
+     "altName": "汁",
+     "price": 0
+    },
+    {
+     "name": "Spicy",
+     "altName": "辣",
+     "price": 0
+    },
+    {
+     "name": "MSG",
+     "altName": "味精",
+     "price": 0
+    },
+    {
+     "name": "Garlic",
+     "altName": "蒜",
+     "price": 0
+    },
+    {
+     "name": "Salt",
+     "altName": "鹽",
+     "price": 0
+    },
+    {
+     "name": "Sugar",
+     "altName": "糖",
+     "price": 0
+    }
+   ],
+   "categories": [
+    "Lunch Special",
+    "Chicken",
+    "Beef",
+    "Seafood",
+    "Pork",
+    "Vegetable",
+    "Diet Dishes",
+    "House Special",
+    "Lo Mein",
+    "Chow Mein",
+    "Chow Mei Fun",
+    "Sweet & Sour"
+   ]
+  },
+  {
+   "name": "Add protein",
+   "actions": [
+    "add",
+    "sub"
+   ],
+   "modifiers": [
+    {
+     "name": "Chicken",
+     "altName": "雞",
+     "price": 2
+    },
+    {
+     "name": "Roast Pork",
+     "altName": "叉燒",
+     "price": 2
+    },
+    {
+     "name": "Beef",
+     "altName": "牛",
+     "price": 2.5
+    },
+    {
+     "name": "Shrimp",
+     "altName": "蝦",
+     "price": 2.5
+    }
+   ],
+   "categories": [
+    "Fried Rice",
+    "Lo Mein",
+    "Chow Mein",
+    "Chow Mei Fun"
+   ]
+  }
+ ]
+}
