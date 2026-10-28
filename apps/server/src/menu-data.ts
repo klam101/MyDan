@@ -16,6 +16,8 @@ export type MenuRow = [
 
 export interface MenuSection {
   name: string;
+  /** The category's Chinese name, shown on the category buttons. */
+  altName?: string;
   note?: string;
   sizes?: string[];
   rows: MenuRow[];
@@ -30,6 +32,8 @@ const PT_QT = ["Pt", "Qt"];
 export const MENU: MenuSection[] = [
   {
     name: "Lunch Special",
+
+    altName: "午餐特價",
     note: "Mon–Sat 11:00 am–3:30 pm. Served with vegetable fried rice and egg roll.",
     rows: [
       ["L1", "叉或雞炒麵", "Roast Pork or Chicken Chow Mein", 6.05, { choices: PORK_CHICKEN }],
@@ -66,6 +70,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "American Selections",
+
+    altName: "美國精選",
     sizes: ["Plain", "w. Fries or Fried Rice", "w. Chicken or Pork Fried Rice", "w. Shrimp or Beef Fried Rice"],
     rows: [
       ["A1", "炸雞翼", "Fried Chicken Wings (4 pcs)", [5.3, 6.6, 6.9, 7.4]],
@@ -89,6 +95,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "Appetizers",
+
+    altName: "頭台",
     rows: [
       ["1", "春卷", "Pork Egg Roll", 1.4],
       ["2", "蝦春卷", "Shrimp Egg Roll", 1.5],
@@ -103,6 +111,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "Soup",
+
+    altName: "湯",
     note: "With dry noodles.",
     sizes: PT_QT,
     rows: [
@@ -119,6 +129,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "Fried Rice",
+
+    altName: "炒飯",
     sizes: PT_QT,
     rows: [
       ["19", "雞或叉炒飯", "Chicken or Roast Pork Fried Rice", [4.95, 7.6], { choices: CHICKEN_PORK }],
@@ -130,6 +142,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "Lo Mein",
+
+    altName: "撈麵",
     note: "Soft noodles.",
     sizes: PT_QT,
     rows: [
@@ -141,6 +155,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "Chow Mein",
+
+    altName: "炒麵",
     note: "With white rice and dry noodles.",
     sizes: PT_QT,
     rows: [
@@ -152,6 +168,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "Chicken",
+
+    altName: "雞",
     note: "With white rice.",
     sizes: PT_QT,
     rows: [
@@ -169,6 +187,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "Beef",
+
+    altName: "牛",
     note: "With white rice.",
     sizes: PT_QT,
     rows: [
@@ -184,6 +204,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "Seafood",
+
+    altName: "海鮮",
     note: "With white rice.",
     sizes: PT_QT,
     rows: [
@@ -201,6 +223,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "Pork",
+
+    altName: "豬肉",
     note: "With white rice.",
     sizes: PT_QT,
     rows: [
@@ -215,6 +239,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "Chop Suey",
+
+    altName: "雜碎",
     note: "With white rice.",
     sizes: PT_QT,
     rows: [
@@ -226,6 +252,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "Sweet & Sour",
+
+    altName: "甜酸",
     note: "With white rice.",
     sizes: PT_QT,
     rows: [
@@ -235,6 +263,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "Chow Mei Fun",
+
+    altName: "炒米粉",
     rows: [
       ["73", "叉或雞炒米", "Roast Pork or Chicken Chow Mei Fun", 7.55, { choices: PORK_CHICKEN }],
       ["74", "蝦或牛炒米", "Shrimp or Beef Chow Mei Fun", 7.75, { choices: SHRIMP_BEEF }],
@@ -245,6 +275,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "Egg Foo Young",
+
+    altName: "芙蓉蛋",
     note: "With white rice. 3 pancakes per order.",
     rows: [
       ["78", "什錦蓉蛋", "Mixed Vegetables Egg Foo Young", 7.3],
@@ -257,6 +289,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "Vegetable",
+
+    altName: "蔬菜",
     note: "With white rice.",
     rows: [
       ["84", "魚香芥蘭", "Broccoli w. Garlic Sauce", 7.75, S],
@@ -269,6 +303,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "Combination Plates",
+
+    altName: "組合拼盤",
     note: "Served with vegetable fried rice and egg roll.",
     rows: [
       ["C1", "雞炒麵", "Chicken Chow Mein", 7.65],
@@ -294,6 +330,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "Diet Dishes",
+
+    altName: "健康餐",
     note: "Steamed, with white rice.",
     sizes: PT_QT,
     rows: [
@@ -305,6 +343,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "House Special",
+
+    altName: "本樓推薦",
     note: "With white rice.",
     rows: [
       ["H1", "四川雞", "Szechuan Chicken", 9.55, S],
@@ -338,6 +378,8 @@ export const MENU: MenuSection[] = [
   },
   {
     name: "Side Orders",
+
+    altName: "配菜",
     rows: [
       ["", "白飯", "White Rice", [2.75, 3.75], { sizes: PT_QT }],
       ["", "麵干", "Dry Noodles", 0.75],

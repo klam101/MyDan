@@ -1,7 +1,7 @@
 import type { MenuItem, OrderLine, PreModifier } from "./types";
 
-/** Pre-modifiers that charge the modifier's price. NO, LIGHT and ON SIDE are free. */
-export const CHARGED_ACTIONS: readonly PreModifier[] = ["add", "extra", "sub"];
+/** Pre-modifiers that charge the modifier's price: only ADD and MORE, as on Front. */
+export const CHARGED_ACTIONS: readonly PreModifier[] = ["add", "extra"];
 
 export const modifierCharge = (action: PreModifier, priceCents: number) =>
   CHARGED_ACTIONS.includes(action) ? priceCents : 0;

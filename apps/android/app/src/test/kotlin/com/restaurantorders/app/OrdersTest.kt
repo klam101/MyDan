@@ -65,9 +65,9 @@ class OrdersTest {
         val (second, _) = app.orders.create(OrderInput(OrderType.WALK_IN, lines = listOf(loMein())))
         assertEquals(1, first.order.number)
         assertEquals(2, second.order.number)
-        // Qt $7.80 + ADD Shrimp $2.50; NO Mushroom is free. Tax 8.875%.
-        assertEquals(1030, first.order.subtotalCents)
-        assertEquals(91, first.order.taxCents)
+        // Qt $7.80 + ADD Shrimp $1.75; NO Mushroom is free. Tax 8.875%.
+        assertEquals(955, first.order.subtotalCents)
+        assertEquals(85, first.order.taxCents)
         assertEquals("Alex", first.createdByName)
         assertEquals(PrintStatus.PRINTED.name, job.status)
         val text = ticketText(job.ticketJson)
@@ -106,7 +106,7 @@ class OrdersTest {
         val (cancelled, job) = app.orders.cancel(created.order.id)
         assertEquals(OrderStatus.CANCELLED, cancelled.order.status)
         assertEquals("CANCELLED", job.kind)
-        assertContains(ticketText(job.ticketJson)[0], "CANCELLED")
+        assertContains(ticketText(job.ticketJson)[0], "VOID")
         assertFailsWith<ActionException> { app.orders.update(created.order.id, OrderInput(OrderType.WALK_IN, lines = listOf(loMein()))) }
         assertEquals("CANCELLED", app.orders.reprint(created.order.id).kind)
     }

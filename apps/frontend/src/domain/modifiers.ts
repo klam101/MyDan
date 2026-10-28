@@ -1,12 +1,14 @@
 import type { LineModifier, Menu, MenuCategory, MenuItem, ModifierList, ModifierPick, PreModifier } from "./types";
 
+// Front's words (the restaurant's old register), so the kitchen reads what it is used to.
 export const PRE_MODIFIERS: { action: PreModifier; label: string }[] = [
   { action: "no", label: "NO" },
   { action: "add", label: "ADD" },
-  { action: "extra", label: "EXTRA" },
-  { action: "light", label: "LIGHT" },
+  { action: "extra", label: "MORE" },
+  { action: "light", label: "LESS" },
   { action: "side", label: "ON SIDE" },
-  { action: "sub", label: "SUB" },
+  { action: "sub", label: "CHANGE" },
+  { action: "only", label: "ONLY" },
 ];
 
 export const actionLabel = (action: PreModifier) => PRE_MODIFIERS.find((p) => p.action === action)!.label;

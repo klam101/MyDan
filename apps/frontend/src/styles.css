@@ -163,7 +163,7 @@ a { color: inherit; }
 /* Pre-modifier colours, shared by the dish sheet, the cart and the kitchen */
 .premod-no { color: var(--red); }
 .premod-add, .premod-sub { color: var(--ok); }
-.premod-extra { color: var(--info); }
+.premod-extra, .premod-only { color: var(--info); }
 .premod-light, .premod-side { color: var(--warn); }
 
 /* Sheets */
@@ -187,7 +187,7 @@ a { color: inherit; }
 .premod.active { color: #fff; }
 .premod-no.active { background: var(--red); border-color: var(--red); }
 .premod-add.active, .premod-sub.active { background: var(--ok); border-color: var(--ok); }
-.premod-extra.active { background: var(--info); border-color: var(--info); }
+.premod-extra.active, .premod-only.active { background: var(--info); border-color: var(--info); }
 .premod-light.active, .premod-side.active { background: var(--warn); border-color: var(--warn); }
 .premods.static .premod { padding: 4px 10px; min-width: 0; font-size: 13px; border-width: 1px; }
 .mod-list { display: grid; }
@@ -197,7 +197,7 @@ a { color: inherit; }
 .mod-chip.picked { background: #fff; border: 2px solid currentColor; }
 .mod-chip.picked.premod-no { color: var(--red); }
 .mod-chip.picked.premod-add, .mod-chip.picked.premod-sub { color: var(--ok); }
-.mod-chip.picked.premod-extra { color: var(--info); }
+.mod-chip.picked.premod-extra, .premod-only { color: var(--info); }
 .mod-chip.picked.premod-light, .mod-chip.picked.premod-side { color: var(--warn); }
 .mod-chip.static { cursor: default; padding: 6px 10px; font-size: 14px; }
 .picked-summary { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px; background: var(--bg); border-radius: 10px; }

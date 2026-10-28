@@ -2,6 +2,7 @@
  "sections": [
   {
    "name": "Lunch Special",
+   "altName": "午餐特價",
    "note": "Mon–Sat 11:00 am–3:30 pm. Served with vegetable fried rice and egg roll.",
    "sizes": [],
    "rows": [
@@ -396,6 +397,7 @@
   },
   {
    "name": "American Selections",
+   "altName": "美國精選",
    "note": null,
    "sizes": [
     "Plain",
@@ -580,6 +582,7 @@
   },
   {
    "name": "Appetizers",
+   "altName": "頭台",
    "note": null,
    "sizes": [],
    "rows": [
@@ -702,6 +705,7 @@
   },
   {
    "name": "Soup",
+   "altName": "湯",
    "note": "With dry noodles.",
    "sizes": [
     "Pt",
@@ -833,6 +837,7 @@
   },
   {
    "name": "Fried Rice",
+   "altName": "炒飯",
    "note": null,
    "sizes": [
     "Pt",
@@ -914,6 +919,7 @@
   },
   {
    "name": "Lo Mein",
+   "altName": "撈麵",
    "note": "Soft noodles.",
    "sizes": [
     "Pt",
@@ -982,6 +988,7 @@
   },
   {
    "name": "Chow Mein",
+   "altName": "炒麵",
    "note": "With white rice and dry noodles.",
    "sizes": [
     "Pt",
@@ -1050,6 +1057,7 @@
   },
   {
    "name": "Chicken",
+   "altName": "雞",
    "note": "With white rice.",
    "sizes": [
     "Pt",
@@ -1190,6 +1198,7 @@
   },
   {
    "name": "Beef",
+   "altName": "牛",
    "note": "With white rice.",
    "sizes": [
     "Pt",
@@ -1304,6 +1313,7 @@
   },
   {
    "name": "Seafood",
+   "altName": "海鮮",
    "note": "With white rice.",
    "sizes": [
     "Pt",
@@ -1444,6 +1454,7 @@
   },
   {
    "name": "Pork",
+   "altName": "豬肉",
    "note": "With white rice.",
    "sizes": [
     "Pt",
@@ -1545,6 +1556,7 @@
   },
   {
    "name": "Chop Suey",
+   "altName": "雜碎",
    "note": "With white rice.",
    "sizes": [
     "Pt",
@@ -1613,6 +1625,7 @@
   },
   {
    "name": "Sweet & Sour",
+   "altName": "甜酸",
    "note": "With white rice.",
    "sizes": [
     "Pt",
@@ -1649,6 +1662,7 @@
   },
   {
    "name": "Chow Mei Fun",
+   "altName": "炒米粉",
    "note": null,
    "sizes": [],
    "rows": [
@@ -1722,6 +1736,7 @@
   },
   {
    "name": "Egg Foo Young",
+   "altName": "芙蓉蛋",
    "note": "With white rice. 3 pancakes per order.",
    "sizes": [],
    "rows": [
@@ -1801,6 +1816,7 @@
   },
   {
    "name": "Vegetable",
+   "altName": "蔬菜",
    "note": "With white rice.",
    "sizes": [],
    "rows": [
@@ -1880,6 +1896,7 @@
   },
   {
    "name": "Combination Plates",
+   "altName": "組合拼盤",
    "note": "Served with vegetable fried rice and egg roll.",
    "sizes": [],
    "rows": [
@@ -2130,6 +2147,7 @@
   },
   {
    "name": "Diet Dishes",
+   "altName": "健康餐",
    "note": "Steamed, with white rice.",
    "sizes": [
     "Pt",
@@ -2192,6 +2210,7 @@
   },
   {
    "name": "House Special",
+   "altName": "本樓推薦",
    "note": "With white rice.",
    "sizes": [],
    "rows": [
@@ -2523,6 +2542,7 @@
   },
   {
    "name": "Side Orders",
+   "altName": "配菜",
    "note": null,
    "sizes": [],
    "rows": [
@@ -2559,51 +2579,49 @@
  ],
  "modifierLists": [
   {
-   "name": "Vegetables",
+   "name": "Meat",
+   "altName": "肉類",
    "actions": [
-    "no",
+    "add",
     "extra",
-    "add"
+    "no",
+    "only",
+    "sub"
    ],
    "modifiers": [
     {
-     "name": "Onion",
-     "altName": "洋蔥",
-     "price": 1
+     "name": "Egg",
+     "altName": "蛋",
+     "price": 1.75
     },
     {
-     "name": "Scallion",
-     "altName": "蔥",
-     "price": 0.5
+     "name": "Shrimp",
+     "altName": "蝦",
+     "price": 1.75
     },
     {
-     "name": "Broccoli",
-     "altName": "芥蘭",
-     "price": 1
+     "name": "Beef",
+     "altName": "牛肉",
+     "price": 1.75
     },
     {
-     "name": "Carrot",
-     "altName": "紅蘿蔔",
-     "price": 0.5
+     "name": "Chicken",
+     "altName": "雞肉",
+     "price": 1.5
     },
     {
-     "name": "Pea Pods",
-     "altName": "雪豆",
-     "price": 1
+     "name": "Roast Pork",
+     "altName": "叉燒",
+     "price": 1.5
     },
     {
-     "name": "Mushroom",
-     "altName": "蘑菇",
-     "price": 1
+     "name": "Jumbo Shrimp",
+     "altName": "大蝦",
+     "price": 1.25
     },
     {
-     "name": "Bean Sprouts",
-     "altName": "芽菜",
-     "price": 0.5
-    },
-    {
-     "name": "Peppers",
-     "altName": "青椒",
+     "name": "Scallops",
+     "altName": "干貝",
      "price": 1
     }
    ],
@@ -2616,17 +2634,163 @@
     "Vegetable",
     "Diet Dishes",
     "House Special",
+    "Combination Plates",
+    "Chop Suey",
+    "Egg Foo Young",
+    "Fried Rice",
     "Lo Mein",
     "Chow Mein",
-    "Fried Rice"
+    "Chow Mei Fun"
+   ]
+  },
+  {
+   "name": "Cook",
+   "altName": "烹飪",
+   "actions": [
+    "extra",
+    "light",
+    "no",
+    "only"
+   ],
+   "modifiers": [
+    {
+     "name": "Crispy",
+     "altName": "酥脆",
+     "price": 0
+    },
+    {
+     "name": "Fried",
+     "altName": "炸",
+     "price": 0
+    },
+    {
+     "name": "Well Done",
+     "altName": "全熟",
+     "price": 0
+    },
+    {
+     "name": "Steamed",
+     "altName": "蒸",
+     "price": 0
+    },
+    {
+     "name": "Fried Hard",
+     "altName": "炸脆",
+     "price": 0
+    },
+    {
+     "name": "Not Fried Hot",
+     "altName": "不要炸脆",
+     "price": 0
+    }
+   ],
+   "categories": [
+    "Lunch Special",
+    "Chicken",
+    "Beef",
+    "Seafood",
+    "Pork",
+    "Vegetable",
+    "Diet Dishes",
+    "House Special",
+    "Combination Plates",
+    "Chop Suey",
+    "Egg Foo Young",
+    "American Selections",
+    "Appetizers"
+   ]
+  },
+  {
+   "name": "Vegetables",
+   "altName": "蔬菜",
+   "actions": [
+    "add",
+    "extra",
+    "light",
+    "no",
+    "only",
+    "sub",
+    "side"
+   ],
+   "modifiers": [
+    {
+     "name": "Mixed Veg",
+     "altName": "雜菜",
+     "price": 1.5
+    },
+    {
+     "name": "Onion",
+     "altName": "洋蔥",
+     "price": 1
+    },
+    {
+     "name": "Broccoli",
+     "altName": "芥蘭",
+     "price": 1
+    },
+    {
+     "name": "Mushroom",
+     "altName": "蘑菇",
+     "price": 1
+    },
+    {
+     "name": "Baby Corn",
+     "altName": "小玉米",
+     "price": 1
+    },
+    {
+     "name": "Green Pepper",
+     "altName": "青椒",
+     "price": 1
+    },
+    {
+     "name": "Scallion",
+     "altName": "蔥",
+     "price": 0.5
+    },
+    {
+     "name": "Carrot",
+     "altName": "紅蘿蔔",
+     "price": 0.5
+    },
+    {
+     "name": "Pea Pods",
+     "altName": "雪豆",
+     "price": 1
+    },
+    {
+     "name": "Bean Sprouts",
+     "altName": "芽菜",
+     "price": 0.5
+    }
+   ],
+   "categories": [
+    "Lunch Special",
+    "Chicken",
+    "Beef",
+    "Seafood",
+    "Pork",
+    "Vegetable",
+    "Diet Dishes",
+    "House Special",
+    "Combination Plates",
+    "Chop Suey",
+    "Egg Foo Young",
+    "Fried Rice",
+    "Lo Mein",
+    "Chow Mein",
+    "Chow Mei Fun"
    ]
   },
   {
    "name": "Sauce & spice",
+   "altName": "醬汁",
    "actions": [
-    "no",
-    "light",
+    "add",
     "extra",
+    "light",
+    "no",
+    "only",
     "side"
    ],
    "modifiers": [
@@ -2670,45 +2834,160 @@
     "Vegetable",
     "Diet Dishes",
     "House Special",
+    "Combination Plates",
+    "Chop Suey",
+    "Egg Foo Young",
+    "Fried Rice",
     "Lo Mein",
     "Chow Mein",
     "Chow Mei Fun",
     "Sweet & Sour"
    ]
-  },
+  }
+ ],
+ "choiceGroups": [
   {
-   "name": "Add protein",
-   "actions": [
-    "add",
-    "sub"
-   ],
-   "modifiers": [
+   "name": "Comb & Lunch Choice",
+   "altName": "套餐&特惠午餐米飯選擇",
+   "min": 0,
+   "max": 1,
+   "choices": [
     {
-     "name": "Chicken",
-     "altName": "雞",
+     "name": "w. White Rice",
+     "altName": "跟白米飯",
+     "price": 0
+    },
+    {
+     "name": "w. Fried Rice",
+     "altName": "跟炒飯",
+     "price": 0
+    },
+    {
+     "name": "w. Plain Fried Rice",
+     "altName": "跟淨炒飯",
+     "price": 0
+    },
+    {
+     "name": "w. Veg Fried Rice",
+     "altName": "跟菜炒飯",
+     "price": 0
+    },
+    {
+     "name": "w. Chicken Fried Rice",
+     "altName": "跟雞炒飯",
+     "price": 1.5
+    },
+    {
+     "name": "w. Pork Fried Rice",
+     "altName": "跟叉燒炒飯",
+     "price": 1.5
+    },
+    {
+     "name": "w. Shrimp Fried Rice",
+     "altName": "跟蝦炒飯",
      "price": 2
     },
     {
-     "name": "Roast Pork",
-     "altName": "叉燒",
+     "name": "w. Beef Fried Rice",
+     "altName": "跟牛炒飯",
      "price": 2
     },
     {
-     "name": "Beef",
-     "altName": "牛",
-     "price": 2.5
+     "name": "w. House Special Fried Rice",
+     "altName": "跟本樓炒飯",
+     "price": 4.75
     },
     {
-     "name": "Shrimp",
-     "altName": "蝦",
-     "price": 2.5
+     "name": "w. Plain Lo Mein",
+     "altName": "跟淨撈麵",
+     "price": 3
+    },
+    {
+     "name": "w. Veg Lo Mein",
+     "altName": "跟菜撈麵",
+     "price": 4
+    },
+    {
+     "name": "w. Chicken Lo Mein",
+     "altName": "跟雞撈麵",
+     "price": 4
+    },
+    {
+     "name": "w. Pork Lo Mein",
+     "altName": "跟叉燒撈麵",
+     "price": 4
+    },
+    {
+     "name": "w. Beef Lo Mein",
+     "altName": "跟牛撈麵",
+     "price": 4.75
+    },
+    {
+     "name": "w. Shrimp Lo Mein",
+     "altName": "跟蝦撈麵",
+     "price": 4.75
+    },
+    {
+     "name": "w. House Lo Mein",
+     "altName": "跟本樓撈麵",
+     "price": 5.75
+    },
+    {
+     "name": "No Rice",
+     "altName": "不要飯",
+     "price": 0
+    },
+    {
+     "name": "YFR",
+     "altName": "揚州炒飯",
+     "price": 4.75
+    },
+    {
+     "name": "Lo Mein",
+     "altName": "撈麵",
+     "price": 3
     }
    ],
    "categories": [
-    "Fried Rice",
-    "Lo Mein",
-    "Chow Mein",
-    "Chow Mei Fun"
+    "Lunch Special",
+    "Combination Plates"
+   ]
+  },
+  {
+   "name": "Something Extra",
+   "altName": "加菜",
+   "min": 0,
+   "max": 5,
+   "choices": [
+    {
+     "name": "Extra Shrimp",
+     "altName": "多蝦",
+     "price": 1
+    },
+    {
+     "name": "Extra Beef",
+     "altName": "多牛",
+     "price": 1
+    },
+    {
+     "name": "Extra Chicken",
+     "altName": "多雞",
+     "price": 1
+    },
+    {
+     "name": "Extra Pork",
+     "altName": "多肉",
+     "price": 1
+    },
+    {
+     "name": "Extra Veg",
+     "altName": "多菜",
+     "price": 1
+    }
+   ],
+   "categories": [
+    "Lunch Special",
+    "Combination Plates"
    ]
   }
  ]

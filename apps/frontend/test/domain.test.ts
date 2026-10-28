@@ -91,7 +91,7 @@ describe("modifier lists", () => {
 
   it("rejects an action the list doesn't allow and ingredients from other dishes", () => {
     const lists = [veg, sauce];
-    expect(checkPicks([{ action: "light", modifierId: "onion" }], lists)).toMatch(/LIGHT is not allowed for Onion/);
+    expect(checkPicks([{ action: "light", modifierId: "onion" }], lists)).toMatch(/LESS is not allowed for Onion/);
     expect(checkPicks([{ action: "add", modifierId: "shrimp" }], lists)).toMatch(/not offered/);
     expect(
       checkPicks(
@@ -111,7 +111,7 @@ describe("modifier lists", () => {
 });
 
 describe("pricing", () => {
-  it("charges ADD and EXTRA, not NO, LIGHT or ON SIDE", () => {
+  it("charges ADD and MORE, not NO, LESS or ON SIDE", () => {
     const line = buildLine(
       menu,
       {

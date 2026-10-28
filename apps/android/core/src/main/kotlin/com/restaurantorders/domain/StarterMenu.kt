@@ -1,5 +1,5 @@
-// The menu a new restaurant starts with: the family restaurant's printed menu and three
-// modifier lists. The JSON comes from scripts/export-starter-menu.mjs.
+// The menu a new restaurant starts with: the family restaurant's printed menu, its modifier
+// lists and choice groups. The JSON comes from scripts/export-starter-menu.mjs.
 package com.restaurantorders.domain
 
 import kotlinx.serialization.Serializable
@@ -7,9 +7,12 @@ import kotlinx.serialization.json.Json
 import kotlin.math.roundToInt
 
 @Serializable
-private class StarterData(val sections: List<Section>, val modifierLists: List<ListSeed>) {
+private class StarterData(val sections: List<Section>, val modifierLists: List<ListSeed>, val choiceGroups: List<ChoiceSeed> = emptyList()) {
     @Serializable
-    class Section(val name: String, val note: String? = null, val sizes: List<String>, val rows: List<Row>)
+    class Section(val name: String, val altName: String? = null, val note: String? = null, val sizes: List<String>, val rows: List<Row>)
+
+    @Serializable
+    class ChoiceSeed(val name: String, val altName: String? = null, val min: Int, val max: Int, val choices: List<Mod>, val categories: List<String>)
 
     @Serializable
     class Row(
@@ -26,7 +29,7 @@ private class StarterData(val sections: List<Section>, val modifierLists: List<L
     )
 
     @Serializable
-    class ListSeed(val name: String, val actions: List<String>, val modifiers: List<Mod>, val categories: List<String>)
+    class ListSeed(val name: String, val altName: String? = null, val actions: List<String>, val modifiers: List<Mod>, val categories: List<String>)
 
     @Serializable
     class Mod(val name: String, val altName: String, val price: Double)
@@ -45,6 +48,17 @@ fun loadStarterMenu(newId: (prefix: String) -> String): Menu {
             name = seed.name,
             actions = seed.actions.map { PreModifier.valueOf(it.uppercase()) },
             modifiers = seed.modifiers.map { Modifier(newId("mod"), it.name, it.altName, cents(it.price)) },
+            altName = seed.altName,
+        )
+    }
+    val groups = data.choiceGroups.map { seed ->
+        ChoiceGroup(
+            id = newId("cgroup"),
+            name = seed.name,
+            altName = seed.altName,
+            min = seed.min,
+            max = seed.max,
+            choices = seed.choices.map { Choice(newId("choice"), it.name, it.altName, cents(it.price)) },
         )
     }
 
@@ -82,7 +96,8 @@ fun loadStarterMenu(newId: (prefix: String) -> String): Menu {
             )
         }
         val attached = data.modifierLists.zip(lists).filter { (seed, _) -> section.name in seed.categories }.map { it.second.id }
-        MenuCategory(categoryId, section.name, section.note, attached, items)
+        val choices = data.choiceGroups.zip(groups).filter { (seed, _) -> section.name in seed.categories }.map { it.second.id }
+        MenuCategory(categoryId, section.name, section.note, attached, items, altName = section.altName, choiceGroupIds = choices)
     }
-    return Menu(categories, lists)
+    return Menu(categories, lists, groups)
 }

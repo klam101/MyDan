@@ -26,6 +26,10 @@ private fun dishLines(line: OrderLine, language: TicketLanguage, mark: String = 
     if (line.options.isNotEmpty()) {
         add(TicketLine("   ${line.options.joinToString(" / ") { it.name }.uppercase()}", LineStyle.TALL, bold = true))
     }
+    for (c in line.choices) {
+        val alt = if (language != TicketLanguage.EN && !c.altName.isNullOrEmpty()) " ${c.altName}" else ""
+        add(TicketLine("   ${c.name.uppercase()}$alt", LineStyle.TALL, bold = true))
+    }
     for (m in line.modifiers) {
         val alt = if (language != TicketLanguage.EN && !m.altName.isNullOrEmpty()) " ${m.altName}" else ""
         add(TicketLine("   ${describeModifier(m.action, m.name).uppercase()}$alt", LineStyle.TALL, bold = true))
@@ -35,18 +39,26 @@ private fun dishLines(line: OrderLine, language: TicketLanguage, mark: String = 
 
 /**
  * Lays out a kitchen ticket. For a CHANGED ticket, `previous` is the order as the kitchen last
- * saw it: dishes are marked + new, * changed, - removed.
+ * saw it: dishes are marked + new, * changed, - removed. `typeName` is the restaurant's name for
+ * the order type (Settings); a voided order prints VOID.
  */
-fun buildTicket(order: Order, kind: TicketKind, language: TicketLanguage, zone: ZoneId, previous: Order? = null): List<TicketLine> = buildList {
+fun buildTicket(
+    order: Order,
+    kind: TicketKind,
+    language: TicketLanguage,
+    zone: ZoneId,
+    previous: Order? = null,
+    typeName: String = order.type.defaultName,
+): List<TicketLine> = buildList {
     when (kind) {
-        TicketKind.CANCELLED -> add(TicketLine(" CANCELLED ", LineStyle.BIG, bold = true, invert = true))
+        TicketKind.CANCELLED -> add(TicketLine(" VOID ", LineStyle.BIG, bold = true, invert = true))
         TicketKind.CHANGED -> add(TicketLine(" CHANGED ", LineStyle.BIG, bold = true, invert = true))
         TicketKind.REPRINT -> add(TicketLine("REPRINT", bold = true))
         else -> {}
     }
 
-    val type = if (order.type == OrderType.PHONE) "PHONE" else "WALK-IN"
-    add(TicketLine("#${order.number}  $type", LineStyle.BIG, bold = true))
+    add(TicketLine("#${order.number}  ${typeName.uppercase()}", LineStyle.BIG, bold = true))
+    if (kind == TicketKind.CANCELLED) order.voidReason?.let { add(TicketLine("REASON: $it", LineStyle.TALL, bold = true)) }
     add(TicketLine("${clock(order.createdAt, zone)}  ${order.businessDate}"))
     order.pickupAt?.let { add(TicketLine("PICKUP ${clock(it, zone)}", LineStyle.TALL, bold = true)) }
     val customer = listOfNotNull(order.customerName, order.customerPhone).joinToString("  ")
@@ -77,6 +89,7 @@ fun buildTicket(order: Order, kind: TicketKind, language: TicketLanguage, zone: 
 
     add(RULE)
     order.note?.let { add(TicketLine("NOTE: $it", LineStyle.TALL, bold = true)) }
+    order.discount?.let { add(TicketLine("DISCOUNT: ${describeDiscount(it)}")) }
 }
 
 /** A short ticket that proves the printer is connected. */

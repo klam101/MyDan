@@ -26,7 +26,7 @@ export function ModifiersScreen() {
       <MenuTabs />
       <div className="page-head">
         <p className="muted">
-          A list lets the cashier change a dish: pick NO, ADD, EXTRA, LIGHT, ON SIDE or SUB, then the ingredient. Attach lists to a whole category on the Dishes tab, or to single dishes.
+          A list lets the cashier change a dish: pick NO, ADD, MORE, LESS, ON SIDE, CHANGE or ONLY, then the ingredient. Attach lists to a whole category on the Dishes tab, or to single dishes.
         </p>
         <button className="secondary" onClick={() => setEditing({})}>
           + New list
@@ -154,7 +154,7 @@ function ListEditor({ rid, menu, list, onClose, onDone }: { rid: string; menu: M
             );
           })}
         </div>
-        <p className="muted small">ADD, EXTRA and SUB charge the price below. NO, LIGHT and ON SIDE are free.</p>
+        <p className="muted small">ADD and MORE charge the price below. The others are free.</p>
       </section>
 
       <section className="sheet-section">

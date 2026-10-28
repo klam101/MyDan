@@ -25,11 +25,11 @@ val RailActive = Color(0xFF34436A)
 /** The selected cart line, Front's yellow. */
 val Selected = Color(0xFFFDE68A)
 
-/** NO in red, ADD/SUB in green, EXTRA in blue, LIGHT/ON SIDE in amber, as in the web app. */
+/** NO in red, ADD/CHANGE in green, MORE/ONLY in blue, LESS/ON SIDE in amber, as in the web app. */
 fun premodColor(action: PreModifier): Color = when (action) {
     PreModifier.NO -> Red
     PreModifier.ADD, PreModifier.SUB -> Ok
-    PreModifier.EXTRA -> Info
+    PreModifier.EXTRA, PreModifier.ONLY -> Info
     PreModifier.LIGHT, PreModifier.SIDE -> Warn
 }
 

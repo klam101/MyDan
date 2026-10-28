@@ -69,16 +69,17 @@ export interface MenuOptionGroup {
 }
 
 /**
- * How a modifier changes a dish, as printed before the ingredient: NO Onion, EXTRA Sauce.
- * ADD, EXTRA and SUB charge the modifier's price; NO, LIGHT and ON SIDE are free.
+ * How a modifier changes a dish, as printed before the ingredient: NO Onion, MORE Sauce.
+ * Labels are Front's (see PRE_MODIFIERS): extra = MORE, light = LESS, sub = CHANGE.
+ * ADD and MORE charge the modifier's price; the others are free.
  */
-export type PreModifier = "no" | "add" | "extra" | "light" | "side" | "sub";
+export type PreModifier = "no" | "add" | "extra" | "light" | "side" | "sub" | "only";
 
 export interface Modifier {
   id: string;
   name: string;
   altName: string | null;
-  /** Charged for ADD, EXTRA and SUB. */
+  /** Charged for ADD and MORE. */
   priceCents: number;
 }
 
@@ -179,7 +180,7 @@ export interface LineModifier {
   modifierId: string;
   name: string;
   altName: string | null;
-  /** What this modifier adds to the line's unit price (0 for NO, LIGHT, ON SIDE). */
+  /** What this modifier adds to the line's unit price (0 unless ADD or MORE). */
   priceCents: number;
 }
 

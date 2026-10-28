@@ -18,8 +18,8 @@ interface Props {
 }
 
 /**
- * Picks a dish's size and protein, and its modifications: choose NO / ADD / EXTRA / LIGHT /
- * ON SIDE / SUB, then tap ingredients. A dish with no modification lists goes into the order
+ * Picks a dish's size and protein, and its modifications: choose NO / ADD / MORE / LESS /
+ * ON SIDE / CHANGE / ONLY, then tap ingredients. A dish with no modification lists goes into the order
  * as soon as its required picks are made, so a sized dish still takes two taps.
  */
 export function ItemSheet({ menu, item, category, initial, onSave, onRemove, onClose }: Props) {

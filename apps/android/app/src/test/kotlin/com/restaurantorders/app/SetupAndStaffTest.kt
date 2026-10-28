@@ -77,7 +77,8 @@ class SetupAndStaffTest {
     fun `setup loads the starter menu and signs the owner in`() = runBlocking {
         assertEquals("Alex", app.session.staff.value?.name)
         assertEquals(182, app.menu.get().categories.sumOf { it.items.size })
-        assertEquals(3, app.menu.get().modifierLists.size)
+        assertEquals(4, app.menu.get().modifierLists.size)
+        assertEquals(2, app.menu.get().choiceGroups.size)
     }
 
     @Test

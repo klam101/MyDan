@@ -69,7 +69,11 @@ class PrintingTest {
         assertEquals(495, friedRice.priceCents)
         assertEquals(listOf(0, 265), friedRice.optionGroups[0].options.map { it.extraCents })
         val loMein = menu.categories.first { it.name == "Lo Mein" }
-        assertEquals(setOf("Vegetables", "Sauce & spice", "Add protein"), loMein.modifierListIds.map { id -> menu.modifierLists.first { it.id == id }.name }.toSet())
-        assertEquals(listOf(PreModifier.ADD, PreModifier.SUB), menu.modifierLists.first { it.name == "Add protein" }.actions)
+        assertEquals(setOf("Meat", "Vegetables", "Sauce & spice"), loMein.modifierListIds.map { id -> menu.modifierLists.first { it.id == id }.name }.toSet())
+        assertEquals(
+            listOf(PreModifier.ADD, PreModifier.EXTRA, PreModifier.NO, PreModifier.ONLY, PreModifier.SUB),
+            menu.modifierLists.first { it.name == "Meat" }.actions,
+        )
+        assertEquals("肉類", menu.modifierLists.first { it.name == "Meat" }.altName)
     }
 }

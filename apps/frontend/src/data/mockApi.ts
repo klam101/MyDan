@@ -172,7 +172,7 @@ export function createMockApi({ latency = 150, printDelay = 2000, persist = true
     if (db.modifierLists.some((l) => l.restaurantId === rid && l.id !== current?.id && l.name.toLowerCase() === name.toLowerCase())) {
       throw new ApiError(`There is already a list called ${name}`, 409);
     }
-    if (!input.actions.length) throw new ApiError("Pick at least one of NO, ADD, EXTRA, LIGHT, ON SIDE, SUB", 400);
+    if (!input.actions.length) throw new ApiError("Pick at least one of NO, ADD, MORE, LESS, ON SIDE, CHANGE, ONLY", 400);
     const modifiers = input.modifiers.map((m) => {
       if (!m.name.trim()) throw new ApiError("Every modification needs a name", 400);
       if (!Number.isInteger(m.priceCents) || m.priceCents < 0) throw new ApiError(`${m.name}: price must be zero or more`, 400);
