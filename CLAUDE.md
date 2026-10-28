@@ -7,19 +7,27 @@ The problem: the cashier shouts orders to the kitchen and chefs must remember th
 down when it gets busy. The cashier enters orders on a tablet instead, and a kitchen ticket
 prints so chefs can see which orders are open and which are done.
 
-The requirements and roadmap doc is the source of truth for scope and decisions:
-https://claude.ai/code/artifact/d01dc4d9-07c8-490b-a427-590b9b187b53
-`docs/requirements.md` is an older snapshot from before the cloud decision.
+## Docs (read these before planning or building a feature)
+
+- `docs/roadmap.md` – requirements, platform decisions, roadmap phases, open questions. Source of
+  truth for scope.
+- `docs/backlog.md` – user stories (IDs like A1, B3, C1) with acceptance criteria, test cases and a
+  Status column. Work stories in priority order (P0 first). When you start or finish a story,
+  update its Status in the tracker table and tick its test cases. Put the story ID in branch
+  names and commit messages.
+- `docs/requirements.md` – older snapshot from before the cloud decision; ignore where it differs.
 
 ## Decisions
 
-- Web app (installable PWA) that works on any tablet; tested on an iPad Mini. No native app.
+- Native Android app in Kotlin for Android tablets and POS terminals (decided 2026-10-28; replaces
+  the earlier web app / PWA plan).
 - Cloud-based: one API and one Postgres database shared by all restaurants. Every row carries
   its restaurant id; logins have roles (owner, manager, cashier).
 - No in-restaurant computer and no offline mode: the internet is reliable, and card payments
   stop without it anyway.
-- Printing: an 80 mm Wi-Fi receipt printer that fetches tickets from the cloud (Epson Server
-  Direct Print, e.g. TM-m30III, or Star CloudPRNT). Tickets may print a few seconds after Send.
+- Printing: an 80 mm receipt printer. Open question since the move to Android: cloud printing
+  (Epson Server Direct Print or Star CloudPRNT) or printing straight from the tablet over Wi-Fi
+  (ESC/POS) or a terminal's built-in printer. See `docs/roadmap.md` and story H1.
 - Roadmap: v1 printed kitchen tickets; v2 kitchen screen and Ready status; v3 card payments
   (premium feature) and reports; later online orders, pickup screen, stations, bilingual tickets.
   The current register keeps handling payments until v3.
@@ -27,17 +35,17 @@ https://claude.ai/code/artifact/d01dc4d9-07c8-490b-a427-590b9b187b53
 
 ## Planned stack
 
-React + TypeScript + Vite (PWA, plain CSS) · Node + TypeScript + Fastify · Postgres · hosted
-auth (e.g. Supabase Auth or Clerk) · a managed host for API and database · Vitest.
+Kotlin Android app · cloud API (planned Node + TypeScript + Fastify) · Postgres · hosted auth
+(e.g. Supabase Auth or Clerk) · a managed host for API and database · JUnit for app tests.
 
-Next step: build the frontend first with mock data (login, pick restaurant, staff and roles,
-plus the existing screens), then list every API call those screens need as the backend plan.
+Next step: the base Android app is built without orders. Add the POS features from
+`docs/backlog.md`, starting with the P0 stories (A1–A4, B1, C1, H1).
 
 ## Current code
 
-The code below is the earlier local version: the server runs on a computer in the restaurant,
-stores data in SQLite and prints directly over the network. It is being moved to the cloud
-design above.
+The Kotlin Android app is not in this repo yet. The code below is the earlier local web version:
+the server runs on a computer in the restaurant, stores data in SQLite and prints directly over
+the network. It is being moved to the cloud design above.
 
 ## Layout
 
