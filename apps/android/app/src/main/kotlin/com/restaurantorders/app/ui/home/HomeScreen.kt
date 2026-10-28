@@ -81,15 +81,8 @@ fun HomeScreen(app: AppContainer, settings: SettingsEntity, staff: Staff) {
                 Tab.MENU -> MenuScreen(app, staff)
                 Tab.STAFF -> StaffScreen(app, staff)
                 Tab.SETTINGS -> SettingsScreen(app, settings)
-                else -> ComingNext(tab.label)
             }
         }
     }
 }
 
-@Composable
-private fun ComingNext(name: String) {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("$name is coming next.", color = MaterialTheme.colorScheme.onSurfaceVariant)
-    }
-}

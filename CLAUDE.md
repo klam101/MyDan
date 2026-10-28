@@ -41,11 +41,17 @@ Kotlin · Jetpack Compose · Room (SQLite) · coroutines · Gradle (Kotlin DSL, 
   `apps/frontend/src/data/mockApi.ts`), `printing/PrintQueue.kt`, `ui/` (Compose screens).
   Only included in the build where an Android SDK is installed.
 
-Status: `core` is done. The `app` has storage (Room; the menu is one JSON document), the print
-queue, Setup, PIN sign-in and Settings with a test ticket. Next: New order, Orders, then Menu,
-Modifier lists and Staff editing.
-Android 17 needs the runtime `ACCESS_LOCAL_NETWORK` permission ("nearby devices") before the
-app can reach the printer; `ui/LocalNetwork.kt` asks for it.
+Status: version 1 is feature-complete and ready for the restaurant test. Screens: Setup, PIN
+sign-in, New order (dish sheet with modifications), Orders (detail, reprint, change → CHANGED,
+cancel), Menu + Modifier lists editing, Staff, Settings (printer test ticket, export).
+Not built yet: kitchen screen (needs a second device), payments.
+- Storage: Room; the menu is one JSON document (`MenuEntity`), orders keep JSON snapshots of
+  their lines, every ticket is a `print_jobs` row saved before it is sent.
+- Printing runs in `AppContainer.appScope` so a ticket still goes out if the screen closes.
+- Android 17 needs the runtime `ACCESS_LOCAL_NETWORK` permission ("nearby devices") before the
+  app can reach the printer; `ui/LocalNetwork.kt` asks for it.
+- Tests: `gradlew :core:test :app:testDebugUnitTest` (Robolectric, in-memory Room, a fake
+  printer); keep adding them next to `OrdersTest.kt` / `MenuEditingTest.kt`.
 
 ## Cloud frontend (`apps/frontend`)
 

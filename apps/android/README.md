@@ -8,7 +8,7 @@ straight to the restaurant's network receipt printer. No server is needed.
 | Folder | What it is | Needs |
 | --- | --- | --- |
 | `core/` | Menu rules, pricing, modifications, ticket layout, printer code. Plain Kotlin. | JDK 17 |
-| `app/` | The Android app: storage, printing, screens (Setup, PIN, Settings so far). | Android Studio |
+| `app/` | The Android app: storage, printing and every screen (Setup, PIN, New order, Orders, Menu, Staff, Settings). | Android Studio |
 | `scripts/` | `export-starter-menu.mjs` makes `core/src/main/resources/starter-menu.json`. | Node |
 
 The rules match the web demo in `apps/frontend/src/domain`. If you change one, change the other.
@@ -23,6 +23,20 @@ The rules match the web demo in `apps/frontend/src/domain`. If you change one, c
 ```
 
 On Windows PowerShell or cmd, use `gradlew` instead of `./gradlew`.
+
+## Using it at the restaurant
+
+- **Sign in:** each person types their own 4-digit PIN. Tap **Lock** when you step away.
+- **Take an order:** type the menu number (e.g. `L6`) or tap a category and a dish. Dishes with
+  sizes or proteins open a sheet; anything else goes straight into the order. Tap **Modify dish ›**
+  on a line, pick NO / ADD / EXTRA / LIGHT / ON SIDE / SUB, then the ingredient.
+- **Send to kitchen:** a green banner means the ticket printed. A red banner means the order is
+  saved but the ticket did not print. Fix the printer, then use **Orders → the order → Try again**.
+- **Change or cancel:** in **Orders**, tap the order. **Change order** prints a CHANGED ticket
+  that marks what is new (+), changed (\*) and removed (-). **Cancel order** prints a CANCELLED
+  ticket.
+- **Sold out:** in **Menu**, flip the dish's switch. Every role can do this.
+- **Back up:** in **Settings → Export data**, save the file somewhere safe, like Google Drive.
 
 ## Finding the printer's IP
 
