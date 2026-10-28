@@ -18,11 +18,18 @@ import java.time.Instant
 enum class PrintStatus { QUEUED, PRINTED, FAILED, NO_PRINTER }
 
 /** Sends one stored ticket's bytes to a printer; swapped for a fake in tests. */
-fun interface TicketSender {
+interface TicketSender {
     fun send(host: String, port: Int, bytes: ByteArray)
+
+    /** Throws PrinterException when the printer doesn't answer; prints nothing. */
+    fun reach(host: String, port: Int)
 }
 
-val networkSender = TicketSender { host, port, bytes -> NetworkPrinter(host, port).send(bytes) }
+val networkSender = object : TicketSender {
+    override fun send(host: String, port: Int, bytes: ByteArray) = NetworkPrinter(host, port).send(bytes)
+
+    override fun reach(host: String, port: Int) = NetworkPrinter(host, port, timeoutMs = 2000).reach()
+}
 
 /**
  * Kitchen tickets. Every ticket is stored before it is sent, so an order is never lost because
@@ -34,6 +41,8 @@ class PrintQueue(
     private val sender: TicketSender = networkSender,
     private val io: CoroutineDispatcher = Dispatchers.IO,
     private val now: () -> Instant = Instant::now,
+    /** Told how every ticket went, so the printer's status stays current between checks. */
+    private val onResult: (PrintJobEntity) -> Unit = {},
 ) {
     /** Stores the ticket, sends it, and returns the job with how it went. */
     suspend fun print(orderId: String?, kind: TicketKind, ticket: List<TicketLine>): PrintJobEntity {
@@ -66,6 +75,6 @@ class PrintQueue(
 
     private suspend fun finish(job: PrintJobEntity, status: PrintStatus, error: String?): PrintJobEntity {
         jobs.setStatus(job.id, status.name, error)
-        return job.copy(status = status.name, error = error)
+        return job.copy(status = status.name, error = error).also(onResult)
     }
 }

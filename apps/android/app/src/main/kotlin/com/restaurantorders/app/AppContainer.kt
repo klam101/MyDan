@@ -15,6 +15,7 @@ import com.restaurantorders.app.data.SettingsRepository
 import com.restaurantorders.app.data.Staff
 import com.restaurantorders.app.data.StaffRepository
 import com.restaurantorders.app.printing.PrintQueue
+import com.restaurantorders.app.printing.PrinterMonitor
 import com.restaurantorders.app.printing.TicketSender
 import com.restaurantorders.app.printing.networkSender
 import com.restaurantorders.domain.Role
@@ -34,7 +35,8 @@ class AppContainer(
     val staff = StaffRepository(db.staff(), session, now)
     val menu = MenuRepository(db.menu(), session)
     val menuEditor = MenuEditor(menu, session)
-    val printing = PrintQueue(db.printJobs(), db.settings(), sender, now = now)
+    val printer = PrinterMonitor(db.settings(), sender, now = now)
+    val printing = PrintQueue(db.printJobs(), db.settings(), sender, now = now, onResult = printer::record)
 
     /** Lives as long as the app; work started here isn't cancelled when a screen closes. */
     val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)

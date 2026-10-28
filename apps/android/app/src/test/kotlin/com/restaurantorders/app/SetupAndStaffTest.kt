@@ -6,6 +6,7 @@ import com.restaurantorders.app.data.ActionException
 import com.restaurantorders.app.data.AppDatabase
 import com.restaurantorders.app.data.SettingsEntity
 import com.restaurantorders.app.printing.PrintStatus
+import com.restaurantorders.app.printing.PrinterState
 import com.restaurantorders.app.printing.TicketSender
 import com.restaurantorders.domain.Permission
 import com.restaurantorders.domain.Role
@@ -33,6 +34,10 @@ class FakePrinter : TicketSender {
     override fun send(host: String, port: Int, bytes: ByteArray) {
         failWith?.let { throw PrinterException(it) }
         sent += bytes
+    }
+
+    override fun reach(host: String, port: Int) {
+        failWith?.let { throw PrinterException(it) }
     }
 }
 
@@ -188,5 +193,24 @@ class SetupAndStaffTest {
         app.staff.setMenuLanguage(TicketLanguage.ZH)
         app.session.lock()
         assertEquals(TicketLanguage.ZH, app.staff.signIn("1111").menuLanguage)
+    }
+    @Test
+    fun `the printer's status follows checks and tickets (H1)`() = runBlocking {
+        assertEquals(PrinterState.ONLINE, app.printer.check().state)
+        val answered = app.printer.health.value.lastContact
+        clock.advance(60)
+        printer.failWith = "The printer at 10.0.0.9 didn't answer."
+        val down = app.printer.check()
+        assertEquals(PrinterState.OFFLINE, down.state)
+        assertEquals(answered, down.lastContact)
+        assertEquals("The printer at 10.0.0.9 didn't answer.", down.problem)
+
+        // A ticket that prints brings it back without waiting for the next check.
+        printer.failWith = null
+        app.printing.print(null, TicketKind.TEST, listOf(TicketLine("x")))
+        assertEquals(PrinterState.ONLINE, app.printer.health.value.state)
+
+        app.settings.save(app.settings.get().copy(printerHost = ""))
+        assertEquals(PrinterState.NOT_SET_UP, app.printer.check().state)
     }
 }

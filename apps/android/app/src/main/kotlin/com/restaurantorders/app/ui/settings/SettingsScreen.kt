@@ -21,6 +21,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +34,11 @@ import androidx.compose.ui.unit.dp
 import com.restaurantorders.app.AppContainer
 import com.restaurantorders.app.data.ActionException
 import com.restaurantorders.app.data.SettingsEntity
+import com.restaurantorders.app.data.discountPresets
+import com.restaurantorders.app.data.orderTypes
+import com.restaurantorders.app.data.voidReasons
+import com.restaurantorders.app.data.withLists
+import com.restaurantorders.app.ui.MoneyField
 import com.restaurantorders.app.data.zone
 import com.restaurantorders.app.printing.PrintStatus
 import com.restaurantorders.app.ui.Banner
@@ -61,6 +67,11 @@ fun SettingsScreen(app: AppContainer, saved: SettingsEntity) {
     var host by remember(saved) { mutableStateOf(saved.printerHost) }
     var port by remember(saved) { mutableStateOf(saved.printerPort.toString()) }
     var chinese by remember(saved) { mutableStateOf(saved.printerChinese) }
+    var types by remember(saved) { mutableStateOf(saved.orderTypes) }
+    var discounts by remember(saved) { mutableStateOf(saved.discountPresets) }
+    var reasons by remember(saved) { mutableStateOf(saved.voidReasons) }
+    var openLimit by remember(saved) { mutableStateOf<Int?>(saved.openItemLimitCents) }
+    val printer by app.printer.health.collectAsState()
     var message by remember { mutableStateOf<BannerMessage?>(null) }
     var printMessage by remember { mutableStateOf<BannerMessage?>(null) }
     var exportMessage by remember { mutableStateOf<BannerMessage?>(null) }
@@ -86,7 +97,8 @@ fun SettingsScreen(app: AppContainer, saved: SettingsEntity) {
         printerHost = host,
         printerPort = port.toIntOrNull() ?: throw ActionException("Printer port must be a number like 9100"),
         printerChinese = chinese,
-    )
+        openItemLimitCents = openLimit ?: throw ActionException("The open item limit must be a price, e.g. 20.00"),
+    ).withLists(types, discounts, reasons)
 
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
@@ -160,6 +172,19 @@ fun SettingsScreen(app: AppContainer, saved: SettingsEntity) {
                     },
                 ) { Text("Save and print test ticket") }
                 printMessage?.let { Banner(it) }
+                PrinterStatusLine(printer, saved) { action.run { app.printer.check() } }
+            }
+
+            Section("Ordering") {
+                OrderTypesEditor(types) { types = it }
+                Text("Discounts the cashier can pick", style = MaterialTheme.typography.titleSmall)
+                DiscountsEditor(discounts) { discounts = it }
+                Text("Reasons offered when an order is voided", style = MaterialTheme.typography.titleSmall)
+                WordsEditor(reasons, "New reason, e.g. Customer left") { reasons = it }
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    MoneyField(openLimit, { openLimit = it }, "Open item limit", Modifier.widthIn(max = 200.dp))
+                    Text("A cashier needs a manager's PIN to ring up an open item above this price.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
             }
 
             Section("Back up") {

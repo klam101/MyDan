@@ -16,17 +16,26 @@ class PrinterException(message: String, cause: Throwable? = null) : Exception(me
  * usual "RAW" or "JetDirect" port). `send` blocks, so the app calls it off the main thread.
  */
 class NetworkPrinter(val host: String, val port: Int = 9100, private val timeoutMs: Int = 4000) {
-    fun send(bytes: ByteArray) {
-        try {
-            Socket().use { socket ->
-                socket.connect(InetSocketAddress(host, port), timeoutMs)
-                socket.soTimeout = timeoutMs
-                socket.getOutputStream().apply {
-                    write(bytes)
-                    flush()
-                }
-                socket.shutdownOutput()
+    fun send(bytes: ByteArray) = explained {
+        Socket().use { socket ->
+            socket.connect(InetSocketAddress(host, port), timeoutMs)
+            socket.soTimeout = timeoutMs
+            socket.getOutputStream().apply {
+                write(bytes)
+                flush()
             }
+            socket.shutdownOutput()
+        }
+    }
+
+    /** Checks the printer answers by opening a connection and closing it; nothing prints. */
+    fun reach() = explained {
+        Socket().use { it.connect(InetSocketAddress(host, port), timeoutMs) }
+    }
+
+    private fun explained(block: () -> Unit) {
+        try {
+            block()
         } catch (e: SocketTimeoutException) {
             throw PrinterException("The printer at $host didn't answer. Is it switched on and on the same network as this tablet?", e)
         } catch (e: ConnectException) {

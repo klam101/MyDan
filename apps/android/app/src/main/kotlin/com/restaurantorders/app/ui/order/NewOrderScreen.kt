@@ -64,6 +64,7 @@ import com.restaurantorders.app.data.typeColor
 import com.restaurantorders.app.data.typeName
 import com.restaurantorders.app.data.zone
 import com.restaurantorders.app.printing.PrintStatus
+import com.restaurantorders.app.printing.PrinterState
 import com.restaurantorders.app.ui.Banner
 import com.restaurantorders.app.ui.BannerKind
 import com.restaurantorders.app.ui.BannerMessage
@@ -200,44 +201,56 @@ fun NewOrderScreen(app: AppContainer, settings: SettingsEntity, staff: Staff, ca
     }
     val sum = runCatching { totals(previews.mapNotNull { it.line }, settings.taxRate, cart.discount) }
     val selected = previews.find { it.key == cart.selected }
+    val printer by app.printer.health.collectAsState()
 
-    Row(Modifier.fillMaxSize()) {
-        CartPane(
-            settings, cart, previews, sum, language, sent, action.error, action.busy,
-            modifier = Modifier.width(380.dp).fillMaxHeight(),
-            onSelect = { p ->
-                val dish = p.line?.takeIf { !it.open }
-                if (cart.selected == p.key && dish != null) open = Open.Mods(p.key, special = true) else cart.selected = p.key
-            },
-            onSend = ::send,
-            onClear = { cart.clear(); sent = null; if (cart.editing != null) onChangeSaved() },
-            onCancelChange = { cart.clear(); onChangeSaved() },
-            onOrderNote = { open = Open.OrderNote },
-        )
-        VerticalDivider()
-        ToolColumn(
-            hasLine = selected != null,
-            canMod = selected?.line?.open == false,
-            onPlus = { selected?.let { cart.changeQuantity(it.key, 1) } },
-            onMinus = { selected?.let { cart.changeQuantity(it.key, -1) } },
-            onQty = { selected?.let { open = Open.Qty(it.key) } },
-            onVoid = { selected?.let { cart.remove(it.key) } },
-            onMod = { selected?.let { open = Open.Mods(it.key, special = false) } },
-            onPrice = { selected?.let { p -> guarded(Permission.PRICE, "Change the price of ${p.line?.name ?: "this dish"}") { open = Open.Price(p.key) } } },
-            onDiscount = { guarded(Permission.DISCOUNT, "Give a discount on this order") { open = Open.Discount } },
-            onUp = { selected?.let { cart.move(it.key, -1) } },
-            onDown = { selected?.let { cart.move(it.key, 1) } },
-            onDishNote = { selected?.let { open = Open.DishNote(it.key) } },
-            onOrderNote = { open = Open.OrderNote },
-        )
-        VerticalDivider()
-        MenuPane(
-            app, current, language, search, { search = it },
-            modifier = Modifier.weight(1f),
-            onTap = ::tap,
-            onOpenItem = { open = Open.OpenItem },
-            onLanguage = { lang -> action.run { app.staff.setMenuLanguage(lang) } },
-        )
+    Column(Modifier.fillMaxSize()) {
+        // A red line while the kitchen printer can't be reached (H1); orders still save.
+        if (printer.state == PrinterState.OFFLINE) {
+            Text(
+                "Kitchen printer can't be reached" + (printer.lastContact?.let { " (last answered ${CLOCK.format(it.atZone(settings.zone))})" } ?: "") +
+                    ". Orders still save; tell the kitchen and reprint from Orders.",
+                color = Color.White, fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth().background(Red).padding(horizontal = 16.dp, vertical = 8.dp),
+            )
+        }
+        Row(Modifier.fillMaxSize()) {
+            CartPane(
+                settings, cart, previews, sum, language, sent, action.error, action.busy,
+                modifier = Modifier.width(380.dp).fillMaxHeight(),
+                onSelect = { p ->
+                    val dish = p.line?.takeIf { !it.open }
+                    if (cart.selected == p.key && dish != null) open = Open.Mods(p.key, special = true) else cart.selected = p.key
+                },
+                onSend = ::send,
+                onClear = { cart.clear(); sent = null; if (cart.editing != null) onChangeSaved() },
+                onCancelChange = { cart.clear(); onChangeSaved() },
+                onOrderNote = { open = Open.OrderNote },
+            )
+            VerticalDivider()
+            ToolColumn(
+                hasLine = selected != null,
+                canMod = selected?.line?.open == false,
+                onPlus = { selected?.let { cart.changeQuantity(it.key, 1) } },
+                onMinus = { selected?.let { cart.changeQuantity(it.key, -1) } },
+                onQty = { selected?.let { open = Open.Qty(it.key) } },
+                onVoid = { selected?.let { cart.remove(it.key) } },
+                onMod = { selected?.let { open = Open.Mods(it.key, special = false) } },
+                onPrice = { selected?.let { p -> guarded(Permission.PRICE, "Change the price of ${p.line?.name ?: "this dish"}") { open = Open.Price(p.key) } } },
+                onDiscount = { guarded(Permission.DISCOUNT, "Give a discount on this order") { open = Open.Discount } },
+                onUp = { selected?.let { cart.move(it.key, -1) } },
+                onDown = { selected?.let { cart.move(it.key, 1) } },
+                onDishNote = { selected?.let { open = Open.DishNote(it.key) } },
+                onOrderNote = { open = Open.OrderNote },
+            )
+            VerticalDivider()
+            MenuPane(
+                app, current, language, search, { search = it },
+                modifier = Modifier.weight(1f),
+                onTap = ::tap,
+                onOpenItem = { open = Open.OpenItem },
+                onLanguage = { lang -> action.run { app.staff.setMenuLanguage(lang) } },
+            )
+        }
     }
 
     when (val o = open) {

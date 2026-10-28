@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import com.restaurantorders.app.AppContainer
 import com.restaurantorders.app.data.SettingsEntity
 import com.restaurantorders.app.data.Staff
+import com.restaurantorders.app.data.enabledOrderTypes
+import com.restaurantorders.domain.OrderType
 import com.restaurantorders.app.data.zone
 import com.restaurantorders.app.ui.LocalNetworkBanner
 import com.restaurantorders.app.ui.menu.MenuScreen
@@ -67,7 +69,9 @@ fun HomeScreen(app: AppContainer, settings: SettingsEntity, staff: Staff) {
     var tab by rememberSaveable { mutableStateOf(tabs.first()) }
     if (tab !in tabs) tab = tabs.first()
     // The order being built survives switching tabs (it is cleared when the tablet is locked).
-    val cart = remember(staff.id) { CartState() }
+    val cart = remember(staff.id) { CartState(settings.enabledOrderTypes.firstOrNull()?.type ?: OrderType.WALK_IN) }
+    // Knock on the printer while someone is signed in, and again whenever its address changes.
+    LaunchedEffect(settings.printerHost, settings.printerPort) { app.printer.watch() }
 
     Row(Modifier.fillMaxSize()) {
         Column(
