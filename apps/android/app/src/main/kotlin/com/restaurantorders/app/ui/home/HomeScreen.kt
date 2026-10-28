@@ -27,6 +27,7 @@ import com.restaurantorders.app.data.Staff
 import com.restaurantorders.app.ui.LocalNetworkBanner
 import com.restaurantorders.app.ui.order.CartState
 import com.restaurantorders.app.ui.order.NewOrderScreen
+import com.restaurantorders.app.ui.orders.OrdersScreen
 import com.restaurantorders.app.ui.settings.SettingsScreen
 import com.restaurantorders.domain.Permission
 import com.restaurantorders.domain.label
@@ -74,6 +75,7 @@ fun HomeScreen(app: AppContainer, settings: SettingsEntity, staff: Staff) {
         Box(Modifier.weight(1f)) {
             when (tab) {
                 Tab.NEW_ORDER -> NewOrderScreen(app, settings, cart, onChangeSaved = { tab = Tab.ORDERS })
+                Tab.ORDERS -> OrdersScreen(app, settings, onChange = { view -> cart.load(view); tab = Tab.NEW_ORDER })
                 Tab.SETTINGS -> SettingsScreen(app, settings)
                 else -> ComingNext(tab.label)
             }

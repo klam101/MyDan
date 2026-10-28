@@ -99,6 +99,8 @@ data class PrintJobEntity(
     val error: String? = null,
 )
 
+data class JobStatus(val orderId: String, val status: String)
+
 @Dao
 interface SettingsDao {
     @Query("SELECT * FROM settings WHERE id = 1")
@@ -172,6 +174,14 @@ interface PrintJobDao {
 
     @Query("SELECT * FROM print_jobs WHERE id = :id")
     suspend fun get(id: String): PrintJobEntity?
+
+    /** Each order's newest ticket status, for "ticket failed" on the order list. */
+    @Query(
+        """SELECT orderId, status FROM print_jobs p
+           WHERE orderId IS NOT NULL
+             AND createdAt = (SELECT MAX(createdAt) FROM print_jobs q WHERE q.orderId = p.orderId)""",
+    )
+    fun watchLatestStatuses(): Flow<List<JobStatus>>
 
     @Query("SELECT * FROM print_jobs WHERE status = 'QUEUED' ORDER BY createdAt")
     suspend fun queued(): List<PrintJobEntity>

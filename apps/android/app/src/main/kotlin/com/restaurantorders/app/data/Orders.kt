@@ -66,6 +66,10 @@ class OrderRepository(
 
     fun watchTickets(orderId: String): Flow<List<PrintJobEntity>> = db.printJobs().watchForOrder(orderId)
 
+    /** Order id → status of its newest ticket. */
+    fun watchLatestTicketStatus(): Flow<Map<String, String>> =
+        db.printJobs().watchLatestStatuses().map { list -> list.associate { it.orderId to it.status } }
+
     suspend fun get(id: String): OrderView = dao.get(id)?.toView() ?: throw ActionException("Order not found")
 
     /** Saves the order, then prints the kitchen ticket. Returns the order and how the ticket went. */
