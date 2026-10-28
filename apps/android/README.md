@@ -26,15 +26,30 @@ On Windows PowerShell or cmd, use `gradlew` instead of `./gradlew`.
 
 ## Using it at the restaurant
 
-- **Sign in:** each person types their own 4-digit PIN. Tap **Lock** when you step away.
-- **Take an order:** type the menu number (e.g. `L6`) or tap a category and a dish. Dishes with
-  sizes or proteins open a sheet; anything else goes straight into the order. Tap **Modify dish ›**
-  on a line, pick NO / ADD / EXTRA / LIGHT / ON SIDE / SUB, then the ingredient.
-- **Send to kitchen:** a green banner means the ticket printed. A red banner means the order is
-  saved but the ticket did not print. Fix the printer, then use **Orders → the order → Try again**.
-- **Change or cancel:** in **Orders**, tap the order. **Change order** prints a CHANGED ticket
-  that marks what is new (+), changed (\*) and removed (-). **Cancel order** prints a CANCELLED
-  ticket.
+The screens are laid out like Front, the register the restaurant uses today.
+
+- **Sign in:** each person types their own 4-digit PIN. Five wrong PINs lock the pad for 30
+  seconds. Tap **Lock** in the side rail when you step away.
+- **Take an order:** the order type is at the top of the cart (Pick Up, Walk In…); **⇄ Change**
+  swaps it. Type the menu number (e.g. `L6`) or a name in English or Chinese, or tap a category
+  on the right and a dish. Dishes with sizes ask **Select size** first.
+- **Change a dish:** tap a cart line to select it (yellow), then use the buttons beside the
+  cart: **+ / −**, **QTY**, **Void**, and **MOD**. MOD has two tabs: **MOD** for choices like
+  "Comb & Lunch Choice", and **Special** for kitchen instructions. Tap **Add, More, Less, No, Only,
+  Change or Side**, then the ingredient. **More** holds Price, Discount, Move up/down and notes.
+  **EN / 中文** switches the menu buttons for the person signed in. **Open Item** rings up anything
+  not on the menu.
+- **Manager PIN:** when a cashier voids, discounts, changes a price or rings up a big open
+  item, a manager or owner types their PIN on the cashier's screen. The order records both names.
+- **Send:** a green banner means the ticket printed. A red banner means the order is saved but
+  the ticket did not print. A red line across the top means the printer can't be reached
+  right now. Fix the printer, then use **Orders → the order → Try again**.
+- **Change or void:** in **Orders**, tap the order. **Change order** prints a CHANGED ticket
+  that marks what is new (+), changed (\*) and removed (-). **Void order** asks for a reason and
+  prints a VOID ticket; the order stays in the list, greyed out.
+- **Settings → Ordering:** turn order types on or off, rename them and pick their colour; edit
+  discount presets, void reasons and the open-item limit. Choice groups and kitchen-instruction
+  lists are under **Menu → Modifiers & choices**.
 - **Sold out:** in **Menu**, flip the dish's switch. Every role can do this.
 - **Back up:** in **Settings → Export data**, save the file somewhere safe, like Google Drive.
 

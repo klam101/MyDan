@@ -46,32 +46,32 @@ order is always saved even if printing fails; no offline mode; no payments befor
 | --- | --- | --- | --- | --- |
 | A1 | Owner creates the restaurant account and signs in with phone or email and password, with password reset | P0 | v1 | In progress |
 | A2 | Owner adds staff with a role (owner, manager, cashier) and a 4-digit PIN | P0 | v1 | In review |
-| A3 | Cashier signs in on the shared tablet with a PIN | P0 | v1 | In progress |
-| A4 | Roles limit what each person can do; risky actions ask for a manager PIN | P0 | v1 | In progress |
+| A3 | Cashier signs in on the shared tablet with a PIN | P0 | v1 | In review |
+| A4 | Roles limit what each person can do; risky actions ask for a manager PIN | P0 | v1 | In review |
 | A5 | Tablet locks after idle time and staff can switch user quickly | P1 | v1 | Not started |
 | A6 | Staff clock in and out from the sign-in screen; owner sees hours | P2 | v3 | Not started |
-| B1 | Show tax and total in the cart before Send | P0 | v1 | In progress |
-| B2 | Add an Open Item with a typed name and price | P1 | v1 | Not started |
-| B3 | Edit a cart line: quantity keypad, void line, move up or down | P1 | v1 | Not started |
-| B4 | Manager overrides a line's price | P1 | v1 | Not started |
-| B5 | Apply a discount to an order ($ or %) | P1 | v1 | Not started |
-| B6 | Switch menu buttons between English and Chinese | P1 | v1 | Not started |
-| B7 | Restaurant-defined order types (Pick Up, Walk In, Phone) and switching type mid-order | P1 | v1 | Not started |
+| B1 | Show tax and total in the cart before Send | P0 | v1 | In review |
+| B2 | Add an Open Item with a typed name and price | P1 | v1 | In review |
+| B3 | Edit a cart line: quantity keypad, void line, move up or down | P1 | v1 | In review |
+| B4 | Manager overrides a line's price | P1 | v1 | In review |
+| B5 | Apply a discount to an order ($ or %) | P1 | v1 | In review |
+| B6 | Switch menu buttons between English and Chinese | P1 | v1 | In review |
+| B7 | Restaurant-defined order types (Pick Up, Walk In, Phone) and switching type mid-order | P1 | v1 | In review |
 | B8 | Menus by time of day (All Day, Lunch) with automatic switching | P2 | v2 | Not started |
 | B9 | Hold (delay) items and add a break line between courses | P3 | Later | Not started |
 | B10 | Mark lines To-Go and record a table or locator number (dine-in restaurants) | P3 | Later | Not started |
-| C1 | Optional modifier groups with prices and min/max picks (Comb & Lunch Choice, Something Extra) | P0 | v1 | In progress |
+| C1 | Optional modifier groups with prices and min/max picks (Comb & Lunch Choice, Something Extra) | P0 | v1 | In review |
 | C2 | Shared modifier library: define a group once, attach it to many dishes | P1 | v1 | In progress |
-| C3 | Kitchen instruction builder: Add/More/Less/No/Only/Change/Side + ingredient, with prices | P1 | v1 | In progress |
+| C3 | Kitchen instruction builder: Add/More/Less/No/Only/Change/Side + ingredient, with prices | P1 | v1 | In review |
 | C4 | Modifiers print in English and Chinese on the kitchen ticket | P1 | v1 | In progress |
 | D1 | Home board with a lane per order type showing open order cards | P1 | v2 | Not started |
 | D2 | Mark an order done from the board; empty lane shows All done | P1 | v2 | Not started |
 | D3 | Start a new order from a lane's + button with that type preset | P1 | v2 | Not started |
 | E1 | Order history for any date range with type, status and staff filters | P1 | v1 | Not started |
 | E2 | Search orders by number, phone or customer name | P1 | v1 | In review |
-| E3 | Totals strip: open, completed and voided counts and amounts | P1 | v1 | In progress |
+| E3 | Totals strip: open, completed and voided counts and amounts | P1 | v1 | In review |
 | E4 | Edit a sent order and print a CHANGED ticket | P1 | v1 | In progress |
-| E5 | Void an order with a reason, recorded with who did it | P1 | v1 | In progress |
+| E5 | Void an order with a reason, recorded with who did it | P1 | v1 | In review |
 | F1 | Customer saved by phone; name fills in on the next order | P1 | v1 | Not started |
 | F2 | Customer list with order count, first and last order, add and edit | P2 | v2 | Not started |
 | F3 | Loyalty points earned per order and redeemed as a discount | P3 | Later | Not started |
@@ -81,7 +81,7 @@ order is always saved even if printing fails; no offline mode; no payments befor
 | G3 | Employee report: orders and sales per staff member | P2 | v3 | Not started |
 | G4 | Exception report: voids, price overrides, discounts, reprints | P2 | v3 | Not started |
 | G5 | Pick a date range (Today, Yesterday, This Week, Custom) and print the report | P2 | v3 | Not started |
-| H1 | Printer setup with test print and status | P0 | v1 | In progress |
+| H1 | Printer setup with test print and status | P0 | v1 | In review |
 | H2 | Menu language setting: second-language names on buttons and tickets | P1 | v1 | In progress |
 | H3 | Business model settings: takeout only or with dine-in and tables | P2 | Later | Not started |
 | H4 | About screen with app version and what's new | P2 | v1 | Not started |
@@ -96,25 +96,21 @@ order is always saved even if printing fails; no offline mode; no payments befor
 
 ### Where the Android app stands (2026-10-28)
 
-Version 1 of `apps/android` covers part of these stories. What each still needs:
+"In review" means every acceptance criterion is built and has automated tests or was checked on
+the emulator; it still needs the family restaurant test.
 
 - **A1:** the owner sets up the tablet once (restaurant, tax, owner name and PIN); no password account until there is a backend.
-- **A2:** built (roles, unique hashed PINs, turn off). Needs the restaurant test.
-- **A3:** the PIN pad signs in on the 4th digit and orders record who sent them. Missing: lock after 5 wrong PINs.
-- **A4:** roles are checked in the repositories, not just hidden screens. Missing: manager PIN prompt for risky actions.
-- **B1:** subtotal, tax and total update live. Missing: item count and discount (B5).
-- **C1:** required groups (sizes, protein picks) work. Missing: optional groups with min/max picks.
-- **C2:** shared modifier lists attach to categories or dishes. Missing: reordering lists; the delete dialog doesn't name the dishes.
-- **C3:** fixed actions NO / ADD / EXTRA / LIGHT / ON SIDE / SUB, priced for ADD, EXTRA and SUB, plus a free-text line note. Missing: restaurant-defined actions and ingredient groups.
+- **A2, A3, A4:** staff and PINs; the PIN pad signs in on the 4th digit, shakes on a wrong PIN and locks for 30 s after 5; voids, price changes, discounts and big open items by a cashier open a manager PIN prompt, and the repositories refuse them otherwise. Approvals are kept on the order. No Reports screen yet.
+- **B1–B7:** Front-style order screen: subtotal, discount, tax, item count and total; Open Item (no reports yet to list it); QTY keypad, Void and Up/Down behind More; price override shown over the struck menu price; preset or typed discounts; EN/中文 per staff member; order types set in Settings with a swap button. Search matches Chinese in the menu's own script (traditional, e.g. 撈麵).
+- **C1:** shared choice groups with min/max picks, a jump list and "(Optional 1)" labels; required groups block Confirm.
+- **C2:** shared lists and groups attach to categories or dishes. Missing: reordering; the delete dialog doesn't name the dishes.
+- **C3:** Special tab with Add, More, Less, No, Only, Change, Side and restaurant-defined ingredient groups (only Add and More charge), plus a free-text note. The action words themselves are fixed.
 - **C4:** names print in English, Chinese or both. Missing: a check that Chinese prints on the ZBS printer.
-- **E2:** built (order number, name, phone). Needs the restaurant test.
-- **E3:** today's order count and total, and counts per status filter. Missing: amounts per status.
-- **E4:** the CHANGED ticket marks new (+), changed (*) and removed (−) lines, and the change is saved even if printing fails. Missing: manager approval for removals and a change history.
-- **E5:** cancel prints a CANCELLED ticket and keeps the order. Missing: reason and manager approval.
-- **H1:** prints straight to the printer (ESC/POS, port 9100) with a test ticket; failed prints show red and can be retried. Missing: printer list with online status, and the test on the real printer.
+- **E2, E3:** search by number, name or phone; per-status counts and amounts under the list.
+- **E4:** CHANGED ticket marks new (+), changed (*) and removed (−) lines; taking away a sent dish needs a manager. Missing: a change history with who made each change.
+- **E5:** Void asks a reason (Settings list or Other) and a manager for cashiers, prints VOID with the reason; voided orders stay greyed. Net sales (G1) don't exist yet.
+- **H1:** prints straight to the printer (ESC/POS, port 9100); status is checked every 30 s with a red line on the order screen when it can't be reached. Missing: the test on the real ZBS printer.
 - **H2:** tickets print English, Chinese or both. Missing: choosing the second language (Chinese is fixed).
-
----
 
 ## Epic A: Staff accounts and sign-in
 
@@ -155,7 +151,7 @@ signs in as themselves.
 **Test cases**
 
 - [ ] UI: add cashier "Amy" with PIN 1234; she appears in the list.
-- [ ] API: a second person with PIN 1234 is refused with "PIN already used".
+- [x] API: a second person with PIN 1234 is refused with "PIN already used".
 - [ ] Manual: deactivate Amy; PIN 1234 no longer signs in and her old orders still show "Amy".
 - [ ] UI: a cashier opening the Staff screen sees "Not allowed".
 
@@ -174,8 +170,8 @@ under 3 seconds.
 **Test cases**
 
 - [ ] UI: enter 1234; Amy is signed in and her name shows in the corner.
-- [ ] UI: a wrong PIN shakes and clears the dots, no sign-in.
-- [ ] Unit: 5 wrong PINs lock the pad for 30 s.
+- [x] UI: a wrong PIN shakes and clears the dots, no sign-in.
+- [x] Unit: 5 wrong PINs lock the pad for 30 s.
 - [ ] Manual: send an order as Amy; order history shows Staff = Amy.
 - [ ] Manual: works on the restaurant tablet in portrait and landscape.
 
@@ -192,8 +188,8 @@ to need a manager PIN, so that prices and voids are controlled.
 
 **Test cases**
 
-- [ ] UI: cashier signs in; Menu, Settings, Staff and Reports are not shown.
-- [ ] API: cashier token editing a menu item gets 403.
+- [x] UI: cashier signs in; Menu, Settings, Staff and Reports are not shown.
+- [x] API: cashier token editing a menu item gets 403.
 - [ ] Manual: cashier voids a line, manager enters PIN; void goes through and the log shows both names.
 - [ ] UI: cashier voids, cancels the prompt; nothing changes.
 
@@ -279,7 +275,7 @@ so that the ticket reads in the order the kitchen cooks.
 
 **Test cases**
 
-- [ ] Unit: QTY 12 makes the line price 12 × unit price.
+- [x] Unit: QTY 12 makes the line price 12 × unit price.
 - [ ] Manual: move line 3 to the top; the ticket prints it first.
 - [ ] UI: void the only line; cart shows "No item selected" and Send is disabled.
 
@@ -295,8 +291,8 @@ on the spot.
 
 **Test cases**
 
-- [ ] Unit: override $9.50 to $8.00; total drops $1.50.
-- [ ] UI: a cashier trying it gets the manager PIN prompt.
+- [x] Unit: override $9.50 to $8.00; total drops $1.50.
+- [x] UI: a cashier trying it gets the manager PIN prompt.
 
 ### B5 Order discount (P1)
 
@@ -311,8 +307,8 @@ regulars a deal.
 
 **Test cases**
 
-- [ ] Unit: 10 % off a $20.00 subtotal gives −$2.00 and tax on $18.00.
-- [ ] Unit: $30 off a $20 order is refused.
+- [x] Unit: 10 % off a $20.00 subtotal gives −$2.00 and tax on $18.00.
+- [x] Unit: $30 off a $20 order is refused.
 
 ### B6 English / Chinese menu buttons (P1)
 
@@ -346,7 +342,7 @@ Dine In), so that the app matches how we work.
 
 - [ ] UI: turn off Phone; it disappears from the order screen.
 - [ ] Manual: start Walk In, swap to Pick Up, send; the ticket says PICK UP.
-- [ ] API: turning off the last type is refused.
+- [x] API: turning off the last type is refused.
 
 ### B8 Menus by time of day (P2)
 
@@ -412,10 +408,10 @@ limits, so that combos and extras are rung up at the right price without typing 
 
 **Test cases**
 
-- [ ] Unit: C9 Hunan Chicken $10.20 + "w. Pork Lo Mein" $4.00 + Extra Shrimp $1.00 = $15.20.
-- [ ] Unit: in a group with max 1, picking a second option replaces the first.
+- [x] Unit: C9 Hunan Chicken $10.20 + "w. Pork Lo Mein" $4.00 + Extra Shrimp $1.00 = $15.20.
+- [x] Unit: in a group with max 1, picking a second option replaces the first.
 - [ ] UI: a required group left empty keeps Confirm disabled with "Pick 1 from Size".
-- [ ] Unit: line price = (base + sum of modifier prices) × quantity, in cents.
+- [x] Unit: line price = (base + sum of modifier prices) × quantity, in cents.
 - [ ] Manual: every Pt/Qt item from the paper menu orders at the right price.
 
 ### C2 Shared modifier library (P1)
@@ -448,8 +444,8 @@ ingredient, so that special requests are fast, priced and readable in the kitche
 
 **Test cases**
 
-- [ ] Unit: No + Onion gives "NO Onion" with no price change.
-- [ ] Unit: Add + Shrimp gives "ADD Shrimp" and +$1.75.
+- [x] Unit: No + Onion gives "NO Onion" with no price change.
+- [x] Unit: Add + Shrimp gives "ADD Shrimp" and +$1.75.
 - [ ] Manual: Less + Sauce and Side + Sauce on one line both print.
 
 ### C4 Bilingual modifiers on tickets (P1)
