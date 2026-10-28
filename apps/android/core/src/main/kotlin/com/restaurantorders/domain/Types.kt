@@ -1,6 +1,7 @@
 // The data model, ported from apps/frontend/src/domain/types.ts. Money is integer cents.
 package com.restaurantorders.domain
 
+import kotlinx.serialization.Serializable
 import java.time.Instant
 import java.time.LocalDate
 
@@ -19,9 +20,11 @@ enum class PreModifier(val label: String, val charged: Boolean) {
     SUB("SUB", true),
 }
 
+@Serializable
 data class MenuOption(val id: String, val name: String, val extraCents: Int)
 
 /** A required pick of exactly one option, such as size (Pt/Qt) or protein (Chicken/Roast Pork). */
+@Serializable
 data class MenuOptionGroup(val name: String, val options: List<MenuOption>) {
     companion object {
         const val SIZE = "Size"
@@ -29,9 +32,11 @@ data class MenuOptionGroup(val name: String, val options: List<MenuOption>) {
     }
 }
 
+@Serializable
 data class Modifier(val id: String, val name: String, val altName: String?, val priceCents: Int)
 
 /** A shared list of modifiers (e.g. Vegetables) attached to categories or dishes. */
+@Serializable
 data class ModifierList(
     val id: String,
     val name: String,
@@ -40,6 +45,7 @@ data class ModifierList(
     val modifiers: List<Modifier>,
 )
 
+@Serializable
 data class MenuItem(
     val id: String,
     val categoryId: String,
@@ -56,6 +62,7 @@ data class MenuItem(
     val modifierListIds: List<String>,
 )
 
+@Serializable
 data class MenuCategory(
     val id: String,
     val name: String,
@@ -65,12 +72,14 @@ data class MenuCategory(
     val items: List<MenuItem>,
 )
 
+@Serializable
 data class Menu(val categories: List<MenuCategory>, val modifierLists: List<ModifierList>)
 
 enum class OrderType { WALK_IN, PHONE }
 
 enum class OrderStatus { OPEN, READY, PICKED_UP, CANCELLED }
 
+@Serializable
 data class ModifierPick(val action: PreModifier, val modifierId: String)
 
 /** One line as the cashier builds it. `lineId` keeps a line's identity when an order is edited. */
@@ -84,8 +93,10 @@ data class NewOrderLine(
     val lineId: String? = null,
 )
 
+@Serializable
 data class LineOption(val optionId: String, val group: String, val name: String, val extraCents: Int)
 
+@Serializable
 data class LineModifier(
     val action: PreModifier,
     val modifierId: String,
@@ -96,6 +107,7 @@ data class LineModifier(
 )
 
 /** A dish in an order, copied from the menu when the order was taken. */
+@Serializable
 data class OrderLine(
     val id: String,
     val menuItemId: String,
@@ -135,6 +147,7 @@ enum class TicketLanguage { EN, ZH, BOTH }
 
 enum class LineStyle { NORMAL, TALL, BIG }
 
+@Serializable
 data class TicketLine(
     val text: String,
     val style: LineStyle = LineStyle.NORMAL,

@@ -3,6 +3,9 @@
 
     <!-- Tickets go straight to the kitchen printer on the restaurant network. -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Android 17+ blocks connections to devices on the local network (like the printer)
+         unless the user allows this at runtime; see ui/LocalNetwork.kt. -->
+    <uses-permission android:name="android.permission.ACCESS_LOCAL_NETWORK" />
 
     <application
         android:name=".RestaurantApp"
