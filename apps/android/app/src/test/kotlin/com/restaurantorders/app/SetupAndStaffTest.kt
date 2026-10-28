@@ -7,7 +7,9 @@ import com.restaurantorders.app.data.AppDatabase
 import com.restaurantorders.app.data.SettingsEntity
 import com.restaurantorders.app.printing.PrintStatus
 import com.restaurantorders.app.printing.TicketSender
+import com.restaurantorders.domain.Permission
 import com.restaurantorders.domain.Role
+import com.restaurantorders.domain.TicketLanguage
 import com.restaurantorders.domain.TicketKind
 import com.restaurantorders.domain.TicketLine
 import com.restaurantorders.printing.PrinterException
@@ -17,6 +19,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import java.time.Instant
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -33,12 +36,19 @@ class FakePrinter : TicketSender {
     }
 }
 
+/** A clock the test moves by hand. */
+class TestClock(var now: Instant = Instant.parse("2026-10-28T16:00:00Z")) {
+    fun advance(seconds: Long) {
+        now = now.plusSeconds(seconds)
+    }
+}
+
 /** A container on an in-memory database, set up like a new tablet with an owner (PIN 1111). */
-fun testApp(printer: FakePrinter = FakePrinter()): AppContainer {
+fun testApp(printer: FakePrinter = FakePrinter(), clock: TestClock? = null): AppContainer {
     val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDatabase::class.java)
         .allowMainThreadQueries()
         .build()
-    val app = AppContainer(db, printer)
+    val app = if (clock == null) AppContainer(db, printer) else AppContainer(db, printer, now = { clock.now })
     runBlocking {
         app.setUp(
             SettingsEntity(restaurantName = "Chinatown Kitchen", taxRate = 0.08875, timezone = "America/New_York", printerHost = "10.0.0.9"),
@@ -52,11 +62,12 @@ fun testApp(printer: FakePrinter = FakePrinter()): AppContainer {
 @RunWith(RobolectricTestRunner::class)
 class SetupAndStaffTest {
     private val printer = FakePrinter()
+    private val clock = TestClock()
     private lateinit var app: AppContainer
 
     @Before
     fun setUp() {
-        app = testApp(printer)
+        app = testApp(printer, clock)
     }
 
     @After
@@ -136,5 +147,45 @@ class SetupAndStaffTest {
         app.settings.save(app.settings.get().copy(printerHost = ""))
         assertEquals(PrintStatus.NO_PRINTER.name, app.printing.print(null, TicketKind.TEST, listOf(TicketLine("x"))).status)
         assertEquals(0, printer.sent.size)
+    }
+    @Test
+    fun `five wrong PINs in a row lock the pad for 30 seconds`() = runBlocking {
+        repeat(4) { assertContains(assertFailsWith<ActionException> { app.staff.signIn("9999") }.message!!, "doesn't match") }
+        assertContains(assertFailsWith<ActionException> { app.staff.signIn("9999") }.message!!, "Try again in 30 seconds")
+        // Even the right PIN is refused while locked.
+        assertContains(assertFailsWith<ActionException> { app.staff.signIn("1111") }.message!!, "Too many wrong PINs")
+        clock.advance(31)
+        assertEquals("Alex", app.staff.signIn("1111").name)
+    }
+
+    @Test
+    fun `a right PIN resets the count of wrong ones`() = runBlocking {
+        repeat(4) { assertFailsWith<ActionException> { app.staff.signIn("9999") } }
+        app.staff.signIn("1111")
+        repeat(4) { assertFailsWith<ActionException> { app.staff.signIn("9999") } }
+        assertEquals("Alex", app.staff.signIn("1111").name)
+    }
+
+    @Test
+    fun `a cashier needs a manager's PIN for risky actions`() = runBlocking {
+        val manager = app.staff.add("Mei", Role.MANAGER, "2222")
+        val cashier = app.staff.add("Tony", Role.CASHIER, "3333")
+        app.staff.signIn("3333")
+        assertContains(assertFailsWith<ActionException> { app.staff.authorize(Permission.VOID, null) }.message!!, "manager's PIN")
+        assertContains(assertFailsWith<ActionException> { app.staff.approve("3333", Permission.VOID) }.message!!, "can't approve")
+        val approver = app.staff.approve("2222", Permission.VOID)
+        assertEquals(manager.id, approver.id)
+        // The tablet stays signed in as the cashier.
+        assertEquals(cashier.id, app.session.staff.value!!.id)
+        assertEquals(cashier.id to manager.id, app.staff.authorize(Permission.VOID, approver.id).let { it.first.id to it.second!!.id })
+        app.staff.signIn("2222")
+        assertNull(app.staff.authorize(Permission.DISCOUNT, null).second)
+    }
+
+    @Test
+    fun `each person's menu language is remembered`() = runBlocking {
+        app.staff.setMenuLanguage(TicketLanguage.ZH)
+        app.session.lock()
+        assertEquals(TicketLanguage.ZH, app.staff.signIn("1111").menuLanguage)
     }
 }

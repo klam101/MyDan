@@ -31,7 +31,7 @@ class AppContainer(
 ) {
     val session = Session()
     val settings = SettingsRepository(db.settings(), session)
-    val staff = StaffRepository(db.staff(), session)
+    val staff = StaffRepository(db.staff(), session, now)
     val menu = MenuRepository(db.menu(), session)
     val menuEditor = MenuEditor(menu, session)
     val printing = PrintQueue(db.printJobs(), db.settings(), sender, now = now)

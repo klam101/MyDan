@@ -1,7 +1,11 @@
 // What each role may do, ported from apps/frontend/src/domain/permissions.ts.
 package com.restaurantorders.domain
 
-enum class Permission { ORDER, ORDERS, KITCHEN, SOLD_OUT, MENU, STAFF, SETTINGS }
+/**
+ * VOID (void an order or a dish already sent), PRICE (change a dish's price) and DISCOUNT are
+ * the risky actions: a cashier can only do them with a manager's PIN (backlog A4).
+ */
+enum class Permission { ORDER, ORDERS, KITCHEN, SOLD_OUT, MENU, STAFF, SETTINGS, VOID, PRICE, DISCOUNT }
 
 private val BY_ROLE = mapOf(
     Role.OWNER to Permission.entries.toSet(),
