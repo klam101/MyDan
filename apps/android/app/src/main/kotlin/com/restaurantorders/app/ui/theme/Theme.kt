@@ -4,6 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.restaurantorders.domain.PreModifier
 
 // The same colours as the web app (apps/frontend/src/styles.css).
 val Red = Color(0xFFB91C1C)
@@ -18,6 +19,14 @@ val Warn = Color(0xFF92400E)
 val WarnSoft = Color(0xFFFEF3C7)
 val Info = Color(0xFF1E40AF)
 val InfoSoft = Color(0xFFDBEAFE)
+
+/** NO in red, ADD/SUB in green, EXTRA in blue, LIGHT/ON SIDE in amber, as in the web app. */
+fun premodColor(action: PreModifier): Color = when (action) {
+    PreModifier.NO -> Red
+    PreModifier.ADD, PreModifier.SUB -> Ok
+    PreModifier.EXTRA -> Info
+    PreModifier.LIGHT, PreModifier.SIDE -> Warn
+}
 
 private val colors = lightColorScheme(
     primary = Red,

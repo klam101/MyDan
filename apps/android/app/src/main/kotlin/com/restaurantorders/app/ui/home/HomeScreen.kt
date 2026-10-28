@@ -14,6 +14,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -24,6 +25,8 @@ import com.restaurantorders.app.AppContainer
 import com.restaurantorders.app.data.SettingsEntity
 import com.restaurantorders.app.data.Staff
 import com.restaurantorders.app.ui.LocalNetworkBanner
+import com.restaurantorders.app.ui.order.CartState
+import com.restaurantorders.app.ui.order.NewOrderScreen
 import com.restaurantorders.app.ui.settings.SettingsScreen
 import com.restaurantorders.domain.Permission
 import com.restaurantorders.domain.label
@@ -42,6 +45,8 @@ fun HomeScreen(app: AppContainer, settings: SettingsEntity, staff: Staff) {
     val tabs = Tab.entries.filter { staff.can(it.permission) }
     var tab by rememberSaveable { mutableStateOf(tabs.first()) }
     if (tab !in tabs) tab = tabs.first()
+    // The order being built survives switching tabs (it is cleared when the tablet is locked).
+    val cart = remember(staff.id) { CartState() }
 
     Column(Modifier.fillMaxSize()) {
         Surface(tonalElevation = 0.dp, color = MaterialTheme.colorScheme.surface) {
@@ -68,6 +73,7 @@ fun HomeScreen(app: AppContainer, settings: SettingsEntity, staff: Staff) {
         LocalNetworkBanner()
         Box(Modifier.weight(1f)) {
             when (tab) {
+                Tab.NEW_ORDER -> NewOrderScreen(app, settings, cart, onChangeSaved = { tab = Tab.ORDERS })
                 Tab.SETTINGS -> SettingsScreen(app, settings)
                 else -> ComingNext(tab.label)
             }
