@@ -20,7 +20,7 @@ tasks.test {
 // tablet app exists:  gradlew :core:printTest --args="192.168.1.50"
 tasks.register<JavaExec>("printTest") {
     group = "verification"
-    description = "Sends a sample kitchen ticket to a network printer: --args=\"<ip> [port]\""
+    description = "Sends sample kitchen tickets to a network printer: --args=\"<ip> [port] [--chinese|--image|--star]\" or --preview"
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("com.restaurantorders.tools.PrintTestKt")
 }

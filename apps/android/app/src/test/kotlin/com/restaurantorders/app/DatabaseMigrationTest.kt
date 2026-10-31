@@ -71,6 +71,7 @@ class DatabaseMigrationTest {
             assertEquals("ChinaTown", settings.restaurantName)
             assertEquals("192.168.1.50", settings.printerHost)
             assertEquals(2000, settings.openItemLimitCents)
+            assertEquals("TEXT", settings.printerMode)
             assertEquals("EN", db.staff().get("s1")!!.menuLanguage)
             val order = db.orders().get("o1")!!
             assertEquals(1089, order.totalCents)

@@ -4,12 +4,18 @@ import com.restaurantorders.app.data.AppJson
 import com.restaurantorders.app.data.PrintJobDao
 import com.restaurantorders.app.data.PrintJobEntity
 import com.restaurantorders.app.data.SettingsDao
+import com.restaurantorders.app.data.SettingsEntity
+import com.restaurantorders.app.data.printMode
 import com.restaurantorders.app.data.newId
 import com.restaurantorders.domain.TicketKind
 import com.restaurantorders.domain.TicketLine
+import com.restaurantorders.printing.DOTS_80MM
 import com.restaurantorders.printing.EscPos
 import com.restaurantorders.printing.NetworkPrinter
+import com.restaurantorders.printing.PrintMode
 import com.restaurantorders.printing.PrinterException
+import com.restaurantorders.printing.RasterCommands
+import com.restaurantorders.printing.TicketRasterizer
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -43,6 +49,8 @@ class PrintQueue(
     private val now: () -> Instant = Instant::now,
     /** Told how every ticket went, so the printer's status stays current between checks. */
     private val onResult: (PrintJobEntity) -> Unit = {},
+    /** Draws tickets as pictures when the printer is set to print images. */
+    private val rasterizer: TicketRasterizer = AndroidRasterizer,
 ) {
     /** Stores the ticket, sends it, and returns the job with how it went. */
     suspend fun print(orderId: String?, kind: TicketKind, ticket: List<TicketLine>): PrintJobEntity {
@@ -66,11 +74,18 @@ class PrintQueue(
         if (config == null || config.printerHost.isBlank()) return finish(job, PrintStatus.NO_PRINTER, null)
         val ticket = AppJson.decodeFromString<List<TicketLine>>(job.ticketJson)
         return try {
-            withContext(io) { sender.send(config.printerHost, config.printerPort, EscPos.render(ticket, config.printerChinese)) }
+            withContext(io) { sender.send(config.printerHost, config.printerPort, bytes(ticket, config)) }
             finish(job, PrintStatus.PRINTED, null)
         } catch (e: PrinterException) {
             finish(job, PrintStatus.FAILED, e.message)
         }
+    }
+
+    /** The ticket in the printer's language: text, or a picture in its image format. */
+    private fun bytes(ticket: List<TicketLine>, config: SettingsEntity): ByteArray = when (config.printMode) {
+        PrintMode.TEXT -> EscPos.render(ticket, config.printerChinese)
+        PrintMode.IMAGE -> RasterCommands.escPos(rasterizer.render(ticket, DOTS_80MM))
+        PrintMode.STAR_IMAGE -> RasterCommands.star(rasterizer.render(ticket, DOTS_80MM))
     }
 
     private suspend fun finish(job: PrintJobEntity, status: PrintStatus, error: String?): PrintJobEntity {

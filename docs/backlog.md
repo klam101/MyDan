@@ -85,6 +85,8 @@ order is always saved even if printing fails; no offline mode; no payments befor
 | H2 | Menu language setting: second-language names on buttons and tickets | P1 | v1 | In progress |
 | H3 | Business model settings: takeout only or with dine-in and tables | P2 | Later | Not started |
 | H4 | About screen with app version and what's new | P2 | v1 | Not started |
+| H5 | Print tickets as a picture, for image-only printers (Star TSP100) and Chinese on any printer | P1 | v1 | In review |
+| H6 | 58 mm paper: tickets fit narrower printers the restaurant already owns | P2 | v1 | Not started |
 | I1 | Online ordering page for customers | P3 | Later | Not started |
 | I2 | Delivery app orders (UberEats, DoorDash, Grubhub) arrive on the board and print | P3 | Later | Not started |
 | I3 | Pickup screen showing ready order numbers | P3 | Later | Not started |
@@ -789,6 +791,39 @@ As an owner, I want to see the app version and what changed, so that I know when
 **Test cases**
 
 - [ ] Manual: after installing a new version, About shows the dot until opened.
+
+### H5 Print tickets as a picture (P1)
+
+As an owner, I want the app to print on the printer I already have, even one that only prints
+pictures, so that I don't have to buy a new one.
+
+**Acceptance criteria**
+
+- Settings → printer type: Text (ESC/POS), Picture (ESC/POS raster, most printers) or Picture (Star TSP100, Star Graphic mode).
+- In picture mode the tablet draws the ticket (big number, bold, white-on-black CHANGED/VOID, Chinese names) and sends it as a raster image.
+- The test ticket uses the chosen type.
+
+**Test cases**
+
+- [x] Unit: ESC/POS pictures are sent as GS v 0 bands, Star pictures as raster rows with blank rows skipped.
+- [x] Unit: a drawn ticket is 576 dots wide, with ink on text lines and a solid VOID bar.
+- [ ] Manual: the Star TSP100III LAN prints the test ticket and an order in "Picture (Star TSP100)".
+- [ ] Manual: the ZBS printer prints Chinese in "Picture" mode.
+
+### H6 58 mm paper (P2)
+
+As an owner with a 58 mm printer, I want tickets laid out for narrow paper, so that I can use the
+printer I already own. On hold (owner, 2026-10-30).
+
+**Acceptance criteria**
+
+- Settings → paper width: 80 mm or 58 mm (384 dots, about 32 characters).
+- Long lines wrap instead of being cut off, in text and picture modes.
+
+**Test cases**
+
+- [ ] Unit: on 58 mm, no ticket line is wider than 32 characters.
+- [ ] Manual: a 58 mm printer prints a full order without cut-off text.
 
 ## Epic I: Online and delivery channels (later)
 

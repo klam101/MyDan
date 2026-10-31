@@ -20,7 +20,15 @@ The rules match the web demo in `apps/frontend/src/domain`. If you change one, c
 ./gradlew :app:installDebug                            # install on a plugged-in tablet or emulator
 ./gradlew :core:printTest --args="192.168.1.50"        # print sample tickets on the real printer
 ./gradlew :core:printTest --args="192.168.1.50 --chinese"   # also try Chinese characters
+./gradlew :core:printTest --args="192.168.1.50 --image"     # as a picture (most printers)
+./gradlew :core:printTest --args="192.168.1.50 --star"      # as a Star picture (TSP100)
+./gradlew :core:printTest --args="--preview"                # save the pictures as PNG files
 ```
+
+**Printer type** (Settings → Kitchen tickets): *Text* is fastest and suits ZBS, Xprinter and
+Epson printers. *Picture* makes the tablet draw each ticket, which works on most printers and
+always prints Chinese. *Picture (Star TSP100)* is for Star printers that only print pictures. If
+a test ticket says it printed but nothing comes out, try a picture type.
 
 On Windows PowerShell or cmd, use `gradlew` instead of `./gradlew`.
 

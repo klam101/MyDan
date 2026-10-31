@@ -67,6 +67,10 @@ board, kitchen screen, reports, payments. Next: the open stories in `docs/backlo
   `data/SettingsLists.kt`, with defaults when empty.
 - Printing runs in `AppContainer.appScope` so a ticket still goes out if the screen closes.
   `printing/PrinterMonitor.kt` checks the printer every 30 s while someone is signed in.
+- Printer type (Settings): text (ESC/POS) or a picture the tablet draws
+  (`printing/AndroidRasterizer.kt`), sent as ESC/POS raster or Star Graphic raster
+  (`core/printing/Raster.kt`). Pictures are for image-only printers like the Star TSP100 and
+  print Chinese on any printer. Tickets are laid out for 80 mm (576 dots); 58 mm is story H6.
 - Android 17 needs the runtime `ACCESS_LOCAL_NETWORK` permission ("nearby devices") before the
   app can reach the printer; `ui/LocalNetwork.kt` asks for it.
 - Tests: `gradlew :core:test :app:testDebugUnitTest` (Robolectric, in-memory Room, a fake
@@ -118,7 +122,8 @@ SQLite and prints directly over the network. Superseded by the Android app; kept
 - `npm run typecheck` – all apps
 - In `apps/android`: `gradlew :core:test` (core tests, needs only JDK 17);
   `gradlew :core:printTest --args="<printer ip>"` sends sample tickets to the real printer
-  (add `--chinese` to try Chinese characters)
+  (add `--chinese` for the printer's Chinese mode, `--image` or `--star` to send pictures;
+  `--args="--preview"` saves the pictures as PNG files instead)
 - `npm run build && npm start` – production: the server also serves the built web app on :3000
 
 ## Conventions

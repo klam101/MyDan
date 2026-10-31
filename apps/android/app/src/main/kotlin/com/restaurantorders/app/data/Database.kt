@@ -43,6 +43,8 @@ data class SettingsEntity(
     @ColumnInfo(defaultValue = "") val voidReasonsJson: String = "",
     /** Open items above this price need a manager PIN when a cashier rings them up. */
     @ColumnInfo(defaultValue = "2000") val openItemLimitCents: Int = 2000,
+    /** TEXT, IMAGE or STAR_IMAGE (printing/Raster.kt PrintMode): how tickets go to the printer. */
+    @ColumnInfo(defaultValue = "TEXT") val printerMode: String = "TEXT",
 )
 
 @Entity(tableName = "staff")
@@ -214,7 +216,7 @@ interface PrintJobDao {
 
 @Database(
     entities = [SettingsEntity::class, StaffEntity::class, MenuEntity::class, OrderEntity::class, PrintJobEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = true,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -241,6 +243,11 @@ val MIGRATIONS = arrayOf(
             db.execSQL("ALTER TABLE orders ADD COLUMN voidReason TEXT")
             db.execSQL("ALTER TABLE orders ADD COLUMN voidedByName TEXT")
             db.execSQL("ALTER TABLE orders ADD COLUMN approvalsJson TEXT NOT NULL DEFAULT '[]'")
+        }
+    },
+    object : Migration(2, 3) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE settings ADD COLUMN printerMode TEXT NOT NULL DEFAULT 'TEXT'")
         }
     },
 )

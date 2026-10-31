@@ -35,6 +35,7 @@ import com.restaurantorders.app.AppContainer
 import com.restaurantorders.app.data.ActionException
 import com.restaurantorders.app.data.SettingsEntity
 import com.restaurantorders.app.data.discountPresets
+import com.restaurantorders.app.data.printMode
 import com.restaurantorders.app.data.orderTypes
 import com.restaurantorders.app.data.voidReasons
 import com.restaurantorders.app.data.withLists
@@ -46,12 +47,15 @@ import com.restaurantorders.app.ui.BannerKind
 import com.restaurantorders.app.ui.BannerMessage
 import com.restaurantorders.app.ui.rememberAction
 import com.restaurantorders.domain.TicketKind
+import com.restaurantorders.printing.PrintMode
 import com.restaurantorders.domain.TicketLanguage
 import com.restaurantorders.domain.buildTestTicket
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.LocalDate
+
+private val PRINT_MODES = listOf(PrintMode.TEXT to "Text", PrintMode.IMAGE to "Picture", PrintMode.STAR_IMAGE to "Picture (Star TSP100)")
 
 private val LANGUAGES = listOf(TicketLanguage.EN to "English", TicketLanguage.ZH to "Chinese", TicketLanguage.BOTH to "Both")
 
@@ -67,6 +71,7 @@ fun SettingsScreen(app: AppContainer, saved: SettingsEntity) {
     var host by remember(saved) { mutableStateOf(saved.printerHost) }
     var port by remember(saved) { mutableStateOf(saved.printerPort.toString()) }
     var chinese by remember(saved) { mutableStateOf(saved.printerChinese) }
+    var mode by remember(saved) { mutableStateOf(saved.printMode) }
     var types by remember(saved) { mutableStateOf(saved.orderTypes) }
     var discounts by remember(saved) { mutableStateOf(saved.discountPresets) }
     var reasons by remember(saved) { mutableStateOf(saved.voidReasons) }
@@ -97,6 +102,7 @@ fun SettingsScreen(app: AppContainer, saved: SettingsEntity) {
         printerHost = host,
         printerPort = port.toIntOrNull() ?: throw ActionException("Printer port must be a number like 9100"),
         printerChinese = chinese,
+        printerMode = mode.name,
         openItemLimitCents = openLimit ?: throw ActionException("The open item limit must be a price, e.g. 20.00"),
     ).withLists(types, discounts, reasons)
 
@@ -145,9 +151,26 @@ fun SettingsScreen(app: AppContainer, saved: SettingsEntity) {
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     )
                 }
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Switch(chinese, { chinese = it })
-                    Text("Printer can print Chinese characters (turn on only if the Chinese test ticket looks right)")
+                Text("How tickets are sent")
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    PRINT_MODES.forEach { (value, label) ->
+                        FilterChip(selected = mode == value, onClick = { mode = value }, label = { Text(label) })
+                    }
+                }
+                Text(
+                    when (mode) {
+                        PrintMode.TEXT -> "Fastest. The printer uses its own letters, so Chinese only prints if it has Chinese built in."
+                        PrintMode.IMAGE -> "The tablet draws each ticket as a picture. Works on most receipt printers and always prints Chinese. Try this if text tickets come out wrong."
+                        PrintMode.STAR_IMAGE -> "For Star printers that only print pictures, such as the TSP100 series."
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                if (mode == PrintMode.TEXT) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Switch(chinese, { chinese = it })
+                        Text("Printer can print Chinese characters (turn on only if the Chinese test ticket looks right)")
+                    }
                 }
                 Text(
                     "Leave the IP empty to run without a printer; tickets then only show on screen.",

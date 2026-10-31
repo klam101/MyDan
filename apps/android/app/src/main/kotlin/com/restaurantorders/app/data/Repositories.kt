@@ -9,6 +9,7 @@ import com.restaurantorders.domain.assignableRoles
 import com.restaurantorders.domain.can
 import com.restaurantorders.domain.canManage
 import com.restaurantorders.domain.loadStarterMenu
+import com.restaurantorders.printing.PrintMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -47,6 +48,9 @@ data class Approval(val permission: Permission, val byName: String, val forName:
 
 val SettingsEntity.language: TicketLanguage get() = TicketLanguage.valueOf(ticketLanguage)
 val SettingsEntity.zone: ZoneId get() = ZoneId.of(timezone)
+
+/** How tickets go to the printer; an unknown value (from a newer app) falls back to text. */
+val SettingsEntity.printMode: PrintMode get() = runCatching { PrintMode.valueOf(printerMode) }.getOrDefault(PrintMode.TEXT)
 
 /** Who is using the tablet right now. Locking the screen signs them out. */
 class Session {

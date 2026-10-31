@@ -1,6 +1,9 @@
-// Checks the real kitchen printer from a computer, before the tablet app exists:
-//   gradlew :core:printTest --args="192.168.1.50"            English ticket
-//   gradlew :core:printTest --args="192.168.1.50 --chinese"  also try Chinese characters
+// Checks the real kitchen printer from a computer:
+//   gradlew :core:printTest --args="192.168.1.50"            text tickets (ESC/POS)
+//   gradlew :core:printTest --args="192.168.1.50 --chinese"  also try the printer's Chinese mode
+//   gradlew :core:printTest --args="192.168.1.50 --image"    tickets as a picture (most printers)
+//   gradlew :core:printTest --args="192.168.1.50 --star"     as a Star picture (Star TSP100)
+//   gradlew :core:printTest --args="--preview"               save the pictures as PNG files instead
 package com.restaurantorders.tools
 
 import com.restaurantorders.domain.ModifierPick
@@ -16,21 +19,35 @@ import com.restaurantorders.domain.buildTestTicket
 import com.restaurantorders.domain.buildTicket
 import com.restaurantorders.domain.loadStarterMenu
 import com.restaurantorders.domain.totals
+import com.restaurantorders.printing.DOTS_80MM
 import com.restaurantorders.printing.EscPos
 import com.restaurantorders.printing.NetworkPrinter
+import com.restaurantorders.printing.PrintMode
 import com.restaurantorders.printing.PrinterException
+import com.restaurantorders.printing.Raster
+import com.restaurantorders.printing.RasterCommands
+import java.awt.image.BufferedImage
+import java.io.File
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import javax.imageio.ImageIO
 import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
-    val host = args.firstOrNull { !it.startsWith("--") } ?: run {
-        println("Usage: gradlew :core:printTest --args=\"<printer ip> [port] [--chinese]\"")
+    val preview = "--preview" in args
+    val host = args.firstOrNull { !it.startsWith("--") } ?: if (preview) "preview" else run {
+        println("Usage: gradlew :core:printTest --args=\"<printer ip> [port] [--chinese | --image | --star]\"")
         exitProcess(2)
     }
     val port = args.drop(1).firstOrNull { it.toIntOrNull() != null }?.toInt() ?: 9100
-    val chinese = "--chinese" in args
+    val mode = when {
+        "--star" in args -> PrintMode.STAR_IMAGE
+        "--image" in args || preview -> PrintMode.IMAGE
+        else -> PrintMode.TEXT
+    }
+    // Pictures always show Chinese: the computer draws the characters, not the printer.
+    val chinese = "--chinese" in args || mode != PrintMode.TEXT
     val zone = ZoneId.systemDefault()
     val now = Instant.now()
 
@@ -69,14 +86,31 @@ fun main(args: Array<String>) {
         buildTicket(order, TicketKind.NEW, language, zone),
     )
     val printer = NetworkPrinter(host, port)
-    for (ticket in tickets) {
+    for ((i, ticket) in tickets.withIndex()) {
         println(EscPos.text(ticket))
+        if (preview) {
+            val file = File("ticket-preview-${i + 1}.png").absoluteFile
+            ImageIO.write(toImage(AwtRasterizer.render(ticket, DOTS_80MM)), "png", file)
+            println("-> saved $file\n")
+            continue
+        }
+        val bytes = when (mode) {
+            PrintMode.TEXT -> EscPos.render(ticket, chinese)
+            PrintMode.IMAGE -> RasterCommands.escPos(AwtRasterizer.render(ticket, DOTS_80MM))
+            PrintMode.STAR_IMAGE -> RasterCommands.star(AwtRasterizer.render(ticket, DOTS_80MM))
+        }
         try {
-            printer.send(EscPos.render(ticket, chinese))
+            printer.send(bytes)
             println("-> sent to $host:$port\n")
         } catch (e: PrinterException) {
             println("-> FAILED: ${e.message}")
             exitProcess(1)
         }
     }
+}
+
+private fun toImage(raster: Raster): BufferedImage {
+    val image = BufferedImage(raster.width, raster.height, BufferedImage.TYPE_BYTE_BINARY)
+    for (y in 0 until raster.height) for (x in 0 until raster.width) image.setRGB(x, y, if (raster.isBlack(x, y)) 0x000000 else 0xffffff)
+    return image
 }
